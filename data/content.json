@@ -1,0 +1,984 @@
+{
+  "visaEnabled": true,
+  "contact": {
+    "phone": "+971 56 793 8033",
+    "phoneCall": "+971567938033",
+    "email": "Info@skyrushtourism.com",
+    "address": "B2B Office Tower - Office # 910 Marasi Dr - near Kana Cafe - Business Bay - Dubai\n",
+    "web3formsAccessKey": "2231b598-b2bb-45ef-811d-3e1db7999435",
+    "whatsapp": "+971567938033",
+    "whatsappMessage": "hello"
+  },
+  "sliders": [
+    {
+      "id": 1,
+      "tag": "Dubai, UAE",
+      "title": "Let's begin your visa application journey.",
+      "text": "Life is unpredictable, and we understand that plans might change. Enjoy our flexible visa booking options, so you can easily reschedule or modify your application.",
+      "btnText": "Get expert guidance for your UAE travel requirements",
+      "rating": "5.0 / 5.0",
+      "image": "/dubai_hero.jpg"
+    },
+    {
+      "id": 2,
+      "tag": "Yerevan, Armenia",
+      "title": "Your Dream Christmas is Calling!",
+      "text": "Join Our Armenia Fixed Departure – Dec 23–27, 2025. Magical winter vibes, festive fun & unforgettable memories await!",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Armenia_hero_1.jpg"
+    },
+    {
+      "id": 3,
+      "tag": "Yerevan, Armenia",
+      "title": "Discover the Oldest Christian Nation",
+      "text": "Experience the magic of Armenia – ancient monasteries, snow-capped peaks, and the festive spirit of Yerevan await you this winter season.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Armenia_hero_2.jpg"
+    },
+    {
+      "id": 4,
+      "tag": "Yerevan, Armenia",
+      "title": "Unforgettable Memories in Armenia",
+      "text": "From Garni Temple to Lake Sevan, explore the breathtaking landscapes and rich heritage of Armenia on our curated fixed departure package.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/armenia_hero_3.jpg"
+    },
+    {
+      "id": 5,
+      "tag": "Almaty, Kazakhstan",
+      "title": "New Year in Kazakhstan | Fixed Departure Dec 30 – Jan 3",
+      "text": "Embark on a Unique Escape to Kazakhstan! From stunning mountains to rich traditions, it's the perfect blend of nature and culture for a memorable holiday.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Kazakhstan_hero.jpg"
+    },
+    {
+      "id": 6,
+      "tag": "Almaty, Kazakhstan",
+      "title": "Conquer the Mountains of Central Asia",
+      "text": "Visit the iconic Charyn Canyon and ride the cable car to Shymbulak Ski Resort. Kazakhstan is the adventure destination you never knew you needed.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Kazakhstan_hero_2.jpg"
+    },
+    {
+      "id": 7,
+      "tag": "Almaty, Kazakhstan",
+      "title": "Winter Wonderland Escape – Almaty Awaits!",
+      "text": "Snow-capped peaks, vibrant city streets, and rich local traditions make Almaty the perfect New Year destination for you and your family.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Kazakhstan_hero_3.jpg"
+    },
+    {
+      "id": 8,
+      "tag": "Kuala Lumpur, Malaysia",
+      "title": "Looking for a Unique Holiday?",
+      "text": "Plan your perfect getaway with a tour package to Malaysia, and discover the wonders of its vibrant cities, tropical rainforests, and stunning beaches.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Malaysia_hero_1.jpg"
+    },
+    {
+      "id": 9,
+      "tag": "Thailand",
+      "title": "Escape to Paradise – Thailand Awaits!",
+      "text": "Experience paradise in Thailand! Enjoy beaches, culture, and adventure with our Thailand Holiday Tour — the perfect quick escape from the everyday.",
+      "btnText": "Book A Trip",
+      "rating": "5.0 / 5.0",
+      "image": "/Thailand_hero.jpg"
+    }
+  ],
+  "features": [
+    {
+      "icon": "fa-solid fa-globe",
+      "title": "Worldwide Destinations",
+      "text": "Explore amazing travel places around the globe."
+    },
+    {
+      "icon": "fa-solid fa-headset",
+      "title": "24/7 Support",
+      "text": "Dedicated customer service available anytime."
+    },
+    {
+      "icon": "fa-solid fa-tags",
+      "title": "Transparent Pricing",
+      "text": "Affordable travel packages with no hidden fees."
+    },
+    {
+      "icon": "fa-solid fa-shield-halved",
+      "title": "Safe Travel",
+      "text": "Your comfort and safety are our priority."
+    }
+  ],
+  "about": {
+    "tag": "About Us",
+    "title": "Let's know About Our Journey For Skyrush Tourism",
+    "stats": "1695+",
+    "statsLabel": "Customer",
+    "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/collage.png",
+    "tabs": [
+      {
+        "title": "Mission & Vision",
+        "text": "At Skyrush Tourism, our mission is to deliver seamless travel experiences, exceptional service, and unforgettable memories to travelers worldwide. We are driven by a commitment to excellence, innovation, and customer satisfaction, ensuring that every journey with us is nothing short of extraordinary."
+      },
+      {
+        "title": "Focus On Customer",
+        "text": "At Skyrush Tourism, our unwavering mission revolves around you, the customer. Your satisfaction is our top priority, and we strive to exceed your expectations at every turn with personalized service and unforgettable journeys."
+      }
+    ]
+  },
+  "tours": [
+    {
+      "id": 1,
+      "packageCode": "58392",
+      "title": "🎉 Almaty, Kazakhstan Tour Package – New Year's Special Offer! 🎉",
+      "duration": "5 Days - 4 Nights",
+      "location": "Kazakhstan",
+      "image": "/Kazakhstan_hero_3.jpg",
+      "price": "د.إ3,400",
+      "days": 5,
+      "nights": 4,
+      "country": "Kazakhstan",
+      "tourType": "Adventure",
+      "hotelCategory": "4-Star Hotel",
+      "gallery": [
+        "/Kazakhstan_hero_3.jpg",
+        "/Kazakhstan_hero.jpg",
+        "/Kazakhstan_hero_2.jpg",
+        "https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Embark on a winter wonderland escape to Almaty, Kazakhstan for the New Year! Enjoy snow-capped mountains, vibrant city streets, and local traditions.",
+      "inclusions": [
+        "Return flights from Dubai",
+        "4 nights in a 4-star hotel in Almaty",
+        "Daily breakfast",
+        "Charyn Canyon tour",
+        "Medeu & Shymbulak cable car tickets"
+      ],
+      "exclusions": [
+        "Visa fee",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips & gratuities"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Arrival & City Tour",
+          "description": "Welcome to Almaty! Check in to your hotel and enjoy a panoramic city tour including Zenkov Cathedral and Panfilov Park."
+        },
+        {
+          "day": "Day 2",
+          "title": "Charyn Canyon Adventure",
+          "description": "Witness the breathtaking wind-carved red sandstones of Charyn Canyon, also known as the Grand Canyon of Central Asia."
+        },
+        {
+          "day": "Day 3",
+          "title": "Medeu & Shymbulak",
+          "description": "Take a cable car ride up to the Shymbulak Ski Resort and enjoy the panoramic alpine scenery at Medeu Gorge."
+        },
+        {
+          "day": "Day 4",
+          "title": "Free Day or Kok-Tobe Hill",
+          "description": "Spend the day shopping at Green Bazaar or take a cable car to Kok-Tobe hill to see the city view."
+        },
+        {
+          "day": "Day 5",
+          "title": "Departure",
+          "description": "After breakfast, transfer to Almaty International Airport for your departure flight."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": false,
+        "dinner": false,
+        "guide": true,
+        "flight": true,
+        "visa": false
+      },
+      "offerPrice": "3000"
+    },
+    {
+      "id": 2,
+      "packageCode": "27140",
+      "title": "🎉 Yerevan, Armenia Tour Package – Christmas Special Offer!",
+      "duration": "5 Days - 4 Nights",
+      "location": "Armenia",
+      "image": "/Armenia_hero_2.jpg",
+      "price": "د.إ3,100",
+      "days": 5,
+      "nights": 4,
+      "country": "Armenia",
+      "tourType": "Family",
+      "hotelCategory": "4-Star Hotel",
+      "gallery": [
+        "/Armenia_hero_2.jpg",
+        "/Armenia_hero_1.jpg",
+        "/armenia_hero_3.jpg",
+        "https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Experience a magical Christmas in Armenia, the oldest Christian nation. Explore historic churches, snowy peaks, and the festive capital of Yerevan.",
+      "inclusions": [
+        "Return flights from Dubai",
+        "4 nights in a Yerevan hotel",
+        "Daily breakfast",
+        "Yerevan city tour",
+        "Garni Temple & Geghard Monastery tour",
+        "Lake Sevan & Tsaghkadzor tour"
+      ],
+      "exclusions": [
+        "Visa fee",
+        "Personal expenses",
+        "Travel insurance",
+        "Tips"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Arrival in Yerevan",
+          "description": "Arrival at Zvartnots International Airport. Transfer to your hotel. Free evening in Republic Square to see the Christmas tree."
+        },
+        {
+          "day": "Day 2",
+          "title": "Yerevan City Tour & Cascade",
+          "description": "Explore Yerevan's Cascade Complex, Opera Theater, and history museums on a guided walk."
+        },
+        {
+          "day": "Day 3",
+          "title": "Garni & Geghard",
+          "description": "Visit the pagan Garni Temple and the UNESCO-listed Geghard Monastery carved into the mountain rock."
+        },
+        {
+          "day": "Day 4",
+          "title": "Tsaghkadzor Ropeway & Lake Sevan",
+          "description": "Enjoy the snow resort of Tsaghkadzor and visit Sevanavank Monastery overlooking the giant blue Lake Sevan."
+        },
+        {
+          "day": "Day 5",
+          "title": "Departure",
+          "description": "Transfer to airport for your flight back home."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": false,
+        "dinner": false,
+        "guide": true,
+        "flight": true,
+        "visa": false
+      }
+    },
+    {
+      "id": 3,
+      "packageCode": "84921",
+      "title": "Greece Tour Package",
+      "duration": "6 Days - 5 Nights",
+      "location": "Greece",
+      "image": "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+      "price": "د.إ5,777",
+      "days": 6,
+      "nights": 5,
+      "country": "Greece",
+      "tourType": "Romantic",
+      "hotelCategory": "5-Star Luxury",
+      "gallery": [
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Embark on an unforgettable journey to Greece. Immerse yourself in the rich history and breathtaking landscapes of Athens, Santorini, and Mykonos.",
+      "inclusions": [
+        "5 nights premium hotel stays",
+        "Daily breakfast",
+        "Guided city tours in Athens",
+        "Santorini sunset cruise"
+      ],
+      "exclusions": [
+        "International flight ticket",
+        "Schengen Visa fees",
+        "Travel Insurance"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Athens Arrival",
+          "description": "Upon arrival, you will be met and transferred to your hotel. Free day to explore the historic city."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": false,
+        "dinner": false,
+        "guide": true,
+        "flight": false,
+        "visa": false
+      }
+    },
+    {
+      "id": 4,
+      "packageCode": "61305",
+      "title": "Singapore Tour Package",
+      "duration": "4 Days - 3 Nights",
+      "location": "Singapore",
+      "image": "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80",
+      "price": "د.إ4,611",
+      "days": 4,
+      "nights": 3,
+      "country": "Singapore",
+      "tourType": "Luxury",
+      "hotelCategory": "5-Star Luxury",
+      "gallery": [
+        "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1565967511849-76a60a516170?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Discover the futuristic city-state of Singapore. Visit Gardens by the Bay, Sentosa Island, and enjoy premium shopping and street food.",
+      "inclusions": [
+        "3 nights hotel stay",
+        "Daily breakfast",
+        "Sentosa Island admission ticket",
+        "Airport transfers"
+      ],
+      "exclusions": [
+        "Visa fee",
+        "Meals other than breakfast",
+        "Personal expenses"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Singapore Arrival",
+          "description": "Arrive at Changi Airport, transfer to hotel. In the evening, visit the Night Safari."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": false,
+        "dinner": false,
+        "guide": false,
+        "flight": false,
+        "visa": false
+      }
+    },
+    {
+      "id": 5,
+      "packageCode": "49512",
+      "title": "Thailand Tour Package",
+      "duration": "4 Days - 3 Nights",
+      "location": "Thailand",
+      "image": "/Thailand_hero.jpg",
+      "price": "د.إ3,400",
+      "days": 4,
+      "nights": 3,
+      "country": "Thailand",
+      "tourType": "Romantic",
+      "hotelCategory": "4-Star Hotel",
+      "gallery": [
+        "/Thailand_hero.jpg",
+        "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506665531195-3566af2b4dfa?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Explore the vibrant streets of Bangkok and relax on the pristine beaches of Pattaya. A perfect short holiday escape.",
+      "inclusions": [
+        "3 nights hotel stay in Bangkok & Pattaya",
+        "Daily breakfast",
+        "Coral Island tour in Pattaya with lunch",
+        "Airport transfers"
+      ],
+      "exclusions": [
+        "Visa fee",
+        "Personal expenses",
+        "Flight ticket"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Arrival in Bangkok",
+          "description": "Meet and greet at airport, transfer to hotel. Free evening."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": true,
+        "dinner": false,
+        "guide": true,
+        "flight": false,
+        "visa": false
+      }
+    },
+    {
+      "id": 6,
+      "packageCode": "73068",
+      "title": "Egypt Tour Package",
+      "duration": "4 Days - 3 Nights",
+      "location": "Egypt",
+      "image": "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80",
+      "price": "د.إ2,030",
+      "days": 4,
+      "nights": 3,
+      "country": "Egypt",
+      "tourType": "Cultural",
+      "hotelCategory": "3-Star Hotel",
+      "gallery": [
+        "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1539650116574-8efeb43e2750?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=800&q=80"
+      ],
+      "overview": "Witness the ancient pyramids of Giza and experience the historical treasures of Cairo with this budget tour package.",
+      "inclusions": [
+        "3 nights in a Cairo hotel",
+        "Daily breakfast",
+        "Full day Pyramids & Egyptian Museum tour",
+        "Airport transfers"
+      ],
+      "exclusions": [
+        "Egypt visa fees",
+        "International flight ticket",
+        "Tips & personal items"
+      ],
+      "itinerary": [
+        {
+          "day": "Day 1",
+          "title": "Arrival in Cairo",
+          "description": "Arrive at Cairo airport, transfer to hotel. Free time to relax."
+        }
+      ],
+      "inclusionsSummary": {
+        "transfer": true,
+        "stay": true,
+        "breakfast": true,
+        "sightseeing": true,
+        "lunch": false,
+        "dinner": false,
+        "guide": true,
+        "flight": false,
+        "visa": false
+      }
+    }
+  ],
+  "visas": [
+    {
+      "id": 1,
+      "title": "30 / 60 Days UAE Tourist Visa Consultancy",
+      "country": "Dubai, UAE",
+      "region": "UAE & GCC",
+      "type": "Express E-Visa",
+      "stay": "30 - 60 Days",
+      "processingTime": "24 - 48 Hours",
+      "entryType": "Single / Multiple Entry",
+      "price": "د.إ450",
+      "countryFrom": "Worldwide",
+      "countryTo": "United Arab Emirates",
+      "minDays": "30",
+      "maxDays": "60",
+      "expressAvailable": true,
+      "approvalRate": "99.4%",
+      "image": "/dubai_hero.jpg",
+      "gallery": [
+        "/dubai_hero.jpg",
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Passport Copy (valid for at least 6 months)",
+        "Recent Passport-Sized Photograph (white background)",
+        "Guarantor Passport Copy / Emirates ID",
+        "Confirmed Flight Ticket & Hotel Reservation"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": true,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>30 / 60 Days UAE Tourist Visa Consultancy</h2><p>Fast-track UAE E-Visa application support for tourists, families, and business travelers visiting Dubai and Abu Dhabi. We provide document verification, sponsor formatting, insurance coordination, and instant GDRFA/ICP submission guidance.</p><h3>Key Package Benefits:</h3><ul><li>Express 24-48 Hours Processing Option available</li><li>99.4% approval track record with verified document checks</li><li>Complete support for single and multiple entry options</li><li>Free COVID & Medical Travel Insurance coordination</li></ul>"
+    },
+    {
+      "id": 2,
+      "title": "Schengen Tourist Visa Appointment & Documentation",
+      "country": "Europe, Schengen Zone",
+      "region": "Schengen",
+      "type": "Sticker Visa Advisory",
+      "stay": "up to 90 Days",
+      "processingTime": "10 - 15 Working Days",
+      "entryType": "Multiple Entry",
+      "price": "د.إ750",
+      "countryFrom": "UAE Residents",
+      "countryTo": "27 Schengen Countries",
+      "minDays": "15",
+      "maxDays": "90",
+      "expressAvailable": true,
+      "approvalRate": "98.8%",
+      "image": "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Valid Passport (6 months validity & 2 blank pages)",
+        "UAE Residence Visa (valid 3+ months)",
+        "3 Months Stamped Bank Statement",
+        "No Objection Certificate (NOC) from Employer",
+        "Schengen Approved Travel Health Insurance (€30,000 cover)",
+        "Confirmed Round-trip Flight & Hotel Bookings"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": true,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>Schengen Tourist Visa Consultancy</h2><p>Comprehensive VFS/TLS appointment booking and documentation compilation for visiting Schengen countries including France, Italy, Switzerland, Germany, Spain, and Greece.</p><h3>Service Includes:</h3><ul><li>VFS / TLS Appointment Booking Assistance</li><li>Detailed Cover Letter & Detailed Itinerary Draft</li><li>3-Month Bank Statement & Proof of Funds Compliance Check</li><li>Flight Reservation & Hotel Voucher Verification</li></ul>"
+    },
+    {
+      "id": 3,
+      "title": "UK Tourist & Visitor Visa Consultancy",
+      "country": "United Kingdom",
+      "region": "Americas & UK",
+      "type": "Standard & Priority Visa",
+      "stay": "6 Months to 2 Years",
+      "processingTime": "7 - 10 Working Days",
+      "entryType": "Multiple Entry",
+      "price": "د.إ850",
+      "countryFrom": "UAE Residents",
+      "countryTo": "United Kingdom",
+      "minDays": "180",
+      "maxDays": "730",
+      "expressAvailable": true,
+      "approvalRate": "98.5%",
+      "image": "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1526129318478-62ed807ebdf9?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1486299267070-83823f5448dd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1513026705753-bc31df43e46e?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Original Passport & UAE Resident Visa Copy",
+        "6 Months Personal / Business Bank Statements",
+        "Employment NOC / Salary Certificate",
+        "Accommodation Proof & Travel Plan"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": false,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>UK Standard Visitor Visa Advisory</h2><p>Professional documentation guidance for UK Standard Visitor Visas (6 Months, 2 Years, or 5 Years). We review financial ties, employment proofs, and upload documents to VFS Global portal.</p>"
+    },
+    {
+      "id": 4,
+      "title": "Japan Tourist E-Visa & Sticker Support",
+      "country": "Japan",
+      "region": "Asia & Far East",
+      "type": "Tourist E-Visa",
+      "stay": "90 Days",
+      "processingTime": "3 - 5 Working Days",
+      "entryType": "Single Entry",
+      "price": "د.إ350",
+      "countryFrom": "UAE Residents",
+      "countryTo": "Japan",
+      "minDays": "15",
+      "maxDays": "90",
+      "expressAvailable": true,
+      "approvalRate": "99.5%",
+      "image": "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Passport Copy (valid for 6 months)",
+        "UAE Emirates ID & Residence Visa",
+        "Recent 3 Months Bank Statement",
+        "Confirmed Daily Itinerary Schedule"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": true,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>Japan Tourist E-Visa Support</h2><p>Hassle-free Japan E-Visa processing support for eligible nationalities and UAE residents. Includes itinerary planning, document translation checks, and direct electronic portal submission.</p>"
+    },
+    {
+      "id": 5,
+      "title": "Cebu / Manila to Dubai Travel Visa Package",
+      "country": "Dubai, Philippines, UAE",
+      "region": "UAE & GCC",
+      "type": "Documentation & Clearance",
+      "stay": "60 - 90 Days",
+      "processingTime": "48 Hours",
+      "entryType": "Single Entry",
+      "price": "د.إ2,099",
+      "countryFrom": "Philippines",
+      "countryTo": "Dubai (UAE)",
+      "minDays": "60",
+      "maxDays": "90",
+      "expressAvailable": true,
+      "approvalRate": "99.1%",
+      "image": "/dubai_hero.jpg",
+      "gallery": [
+        "/dubai_hero.jpg",
+        "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1578894381163-e72c17f2d45f?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Philippine Passport Copy",
+        "Sponsor Passport & UAE Residence Visa",
+        "Affidavit of Support (Notarized)",
+        "Confirmed Round-trip Flight Tickets"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": true,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>Cebu / Manila to Dubai Visa Package</h2><p>Comprehensive travel documentation consultation for outbound travelers departing from the Philippines to Dubai, UAE. Assistance in compiling required documents, guarantor forms, and GDRFA entry authorization.</p>"
+    },
+    {
+      "id": 6,
+      "title": "US B1/B2 Tourist Visa Appointment Support",
+      "country": "United States",
+      "region": "Americas & UK",
+      "type": "DS-160 & Appointment",
+      "stay": "10 Years Multiple",
+      "processingTime": "5 - 7 Working Days",
+      "entryType": "Multiple Entry",
+      "price": "د.إ950",
+      "countryFrom": "UAE Residents",
+      "countryTo": "United States",
+      "minDays": "180",
+      "maxDays": "3650",
+      "expressAvailable": true,
+      "approvalRate": "97.9%",
+      "image": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1485738422979-f5c462d49f74?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1534430480872-3498386e7856?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?auto=format&fit=crop&w=800&q=80"
+      ],
+      "documents": [
+        "Valid Passport (valid 6+ months)",
+        "UAE Residence Visa Copy",
+        "Completed DS-160 Form Details",
+        "US Passport Photo (5x5 cm, white background)",
+        "Proof of Financial Ties & Work Contract"
+      ],
+      "inclusionsSummary": {
+        "fastProcessing": true,
+        "embassySubmission": true,
+        "documentCheck": true,
+        "insuranceAssistance": false,
+        "flightHotelVoucher": true,
+        "guaranteedGuidance": true
+      },
+      "description": "<h2>US B1/B2 Visitor Visa Advisory</h2><p>Expert DS-160 application form completion, US Embassy Dubai/Abu Dhabi interview appointment scheduling, and mock interview preparation guidance.</p>"
+    }
+  ],
+  "whyChoose": [
+    {
+      "icon": "bx bx-globe",
+      "title": "Worldwide Coverage",
+      "text": "Choose Skyrush Tourism for worldwide coverage and explore the globe with ease."
+    },
+    {
+      "icon": "bx bx-support",
+      "title": "Best Support 24/7",
+      "text": "Experience peace of mind with Skyrush Tourism round-the-clock support."
+    },
+    {
+      "icon": "bx bx-time-five",
+      "title": "Fast Booking",
+      "text": "Book your adventure in a flash with Skyrush Tourism lightning-fast booking."
+    },
+    {
+      "icon": "bx bx-dollar",
+      "title": "Competitive Pricing",
+      "text": "Unlock unbeatable value with Skyrush Tourism competitive pricing."
+    },
+    {
+      "icon": "bx bx-map-alt",
+      "title": "Guided Tours",
+      "text": "Embark on unforgettable adventures with Skyrush Tourism expertly guided tours."
+    },
+    {
+      "icon": "bx bx-calendar-check",
+      "title": "Ultimate Flexibility",
+      "text": "Enjoy ultimate flexibility with Skyrush Tourism customizable options."
+    }
+  ],
+  "deals": [
+    {
+      "id": 1,
+      "category": "Apply for UAE Visa",
+      "title": "10% Off",
+      "btnText": "Discover Dubai",
+      "accent": true
+    },
+    {
+      "id": 2,
+      "category": "Couple Tour",
+      "title": "Romantic Getaways",
+      "btnText": "Book Now",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/romantic.png"
+    },
+    {
+      "id": 3,
+      "category": "Savings worldwide",
+      "title": "5 days 4 nights",
+      "subtitle": "in Armenia and Georgia",
+      "btnText": "View This Trip",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/geotgia.png"
+    },
+    {
+      "id": 4,
+      "category": "Book now!",
+      "title": "Kazakhstan Tour Package",
+      "btnText": "Book Now",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/kazakhstan.png"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": 1,
+      "category": "Tripadvisor",
+      "quote": "It's been a great experience traveling to Dubai having good memories to cherish. Thank you Skyrush Tourism for assisting all my needs...",
+      "author": "Sandra Valencian",
+      "location": "India",
+      "avatar": "https://i.pravatar.cc/80?img=5",
+      "meta": "Apr 4, 2025 · 10:30 PM"
+    },
+    {
+      "id": 2,
+      "category": "Tripadvisor",
+      "quote": "Absolutely flawless visa processing service! Got my Dubai tourist visa in just 24 hours. The documentation assistance was top-notch and stress-free.",
+      "author": "John Davis",
+      "location": "United States",
+      "avatar": "https://i.pravatar.cc/80?img=12",
+      "meta": "May 12, 2025 · 09:15 AM"
+    },
+    {
+      "id": 3,
+      "category": "Tripadvisor",
+      "quote": "Booked our family tour to Almaty with Skyrush. The itinerary was perfectly balanced, hotels were premium, and the local guide was very knowledgeable. Highly recommend!",
+      "author": "Maria Santos",
+      "location": "Philippines",
+      "avatar": "https://i.pravatar.cc/80?img=20",
+      "meta": "June 1, 2025 · 04:30 PM"
+    },
+    {
+      "id": 4,
+      "category": "Facebook",
+      "quote": "We had a wonderful trip in Armenia last Feb. 20-23, 2025. Tour was perfectly organized and the drivers were very accommodating.",
+      "author": "Jessa A",
+      "location": "Italy",
+      "avatar": "https://i.pravatar.cc/80?img=9",
+      "meta": "Feb 10, 2025 · 4:00 PM"
+    },
+    {
+      "id": 5,
+      "category": "Facebook",
+      "quote": "Amazing service. Highly responsive customer support team on WhatsApp. They assisted us late at night when our flight was delayed and handled everything.",
+      "author": "Arthur Pendelton",
+      "location": "United Kingdom",
+      "avatar": "https://i.pravatar.cc/80?img=33",
+      "meta": "Jan 22, 2025 · 11:20 AM"
+    },
+    {
+      "id": 6,
+      "category": "Facebook",
+      "quote": "Most competitive prices in Dubai! Their fixed departure package to Georgia was a steal. Everything was inclusive as promised. Will book again.",
+      "author": "Chloe Lim",
+      "location": "Singapore",
+      "avatar": "https://i.pravatar.cc/80?img=47",
+      "meta": "March 5, 2025 · 08:45 PM"
+    },
+    {
+      "id": 7,
+      "category": "Google",
+      "quote": "Had an amazing experience with Skyrush Tourism! From booking to the end of my trip, everything was smooth and stress-free. Highly recommend!",
+      "author": "Crishane Devine Dizon",
+      "location": "Orani, Bataan",
+      "avatar": "https://i.pravatar.cc/80?img=32",
+      "meta": "June 15, 2024 · 06:40 AM"
+    },
+    {
+      "id": 8,
+      "category": "Google",
+      "quote": "Extremely professional team. They guided me through the complex Schengen document checklist and booked my appointments. Very satisfied.",
+      "author": "Rahul Verma",
+      "location": "India",
+      "avatar": "https://i.pravatar.cc/80?img=68",
+      "meta": "Oct 14, 2024 · 02:10 PM"
+    },
+    {
+      "id": 9,
+      "category": "Google",
+      "quote": "5 stars for their fast response! Booked the Singapore holiday package last minute and the coordination was perfect. Visited all top attractions.",
+      "author": "Sarah Jenkins",
+      "location": "Australia",
+      "avatar": "https://i.pravatar.cc/80?img=49",
+      "meta": "July 29, 2024 · 11:00 AM"
+    }
+  ],
+  "blogs": [
+    {
+      "id": 1,
+      "title": "How to Apply for a Dubai Visa from the Philippines – Updated Guide 2025",
+      "author": "amani",
+      "date": "Dec 2, 2025",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/4.jpg",
+      "readTime": "5 Min Read",
+      "excerpt": "Apply for a Dubai visa from the Philippines with this complete and easy-to-follow guide.",
+      "content": "<p>Applying for a entry permit to the UAE from the Philippines can seem complex. Our comprehensive guide walks you through the list of documents required, sponsor rules, and airport immigration processes.</p>"
+    },
+    {
+      "id": 2,
+      "title": "Egypt Beyond the Pyramids: A Journey Through Time",
+      "author": "Tours and Holidays",
+      "date": "Nov 15, 2025",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/Egypt.jpg",
+      "readTime": "2 Min Read",
+      "excerpt": "Discover Egypt beyond the pyramids: a journey through temples, valley of kings and ancient monuments.",
+      "content": "<p>Discover Egypt beyond the pyramids. In this post, we explore ancient Luxor, Aswan, and the stunning Valley of the Kings to showcase the diverse treasures Egypt offers travelers.</p>"
+    },
+    {
+      "id": 3,
+      "title": "Kyrgyzstan Travel Guide – Mountains, Lakes & Adventures Await",
+      "author": "Tours and Holidays",
+      "date": "Oct 10, 2025",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/almaty.jpg",
+      "readTime": "2 Min Read",
+      "excerpt": "Explore Kyrgyzstan with this travel guide featuring top sights, mountain hikes, and scenic alpine lakes.",
+      "content": "<p>Kyrgyzstan is the hidden gem of Central Asia. Featuring dramatic alpine scenery, yurt camps, and nomadic culture, it is the ultimate destination for adventure seekers.</p>"
+    },
+    {
+      "id": 4,
+      "title": "Affordable Georgia Tour Packages from UAE",
+      "author": "Tours and Holidays",
+      "date": "Sep 5, 2025",
+      "image": "https://skyrushtourism.com/wp-content/uploads/2026/06/geotgia.png",
+      "readTime": "2 Min Read",
+      "excerpt": "Book an affordable Georgia tour package from UAE and explore Tbilisi, Kazbegi, and more.",
+      "content": "<p>Georgia is just a short 3-hour flight away from Dubai. Check out our affordable itinerary packages covering Tbilisi old town, the Caucasus mountains, and Kakheti wine region.</p>"
+    }
+  ],
+  "instagram": {
+    "tag": "INSTAGRAM GALLERY",
+    "title": "Follow Us On Instagram",
+    "handle": "@skyrushtourism",
+    "url": "https://www.instagram.com/skyrushtourism",
+    "subtitle": "Discover real moments, travel inspiration, and behind-the-scenes glimpses of our global journeys.",
+    "btnText": "Follow Us On Instagram",
+    "posts": [
+      {
+        "id": "18173169943437540",
+        "image": "https://hop.behold.pictures/eyJ1IjoiT1J1Uk14S0VTbGZBempORHdHdkhnQ1NhM3VjMiIsImYiOiJ2TjdsUWxSZDlhZzkwVXlxb1BzZSIsInAiOiIxODE3MzE2OTk0MzQzNzU0MCIsImgiOiJyd2VmNHIifQ.jpg?class=squareMedium",
+        "caption": "🇺🇸 USA Visa Appointment Slots Available Now !\n\n✅ B1/B2 Tourist Visa\n✅ July, August & September 2026 Slots Available\n✅ All US Embassy & Consulate Locations\n✅ Limited Slots Available\n\n📞 Contact : +971 50 173 7277\n\nBook your appointment before slots fill up. Fast, reliable and trusted visa appointment assistance.",
+        "likes": "7",
+        "comments": "0",
+        "url": "https://www.instagram.com/p/Da4-SyRsOmv/",
+        "isVideo": false
+      },
+      {
+        "id": "18205774246350055",
+        "image": "https://hop.behold.pictures/eyJ1IjoiT1J1Uk14S0VTbGZBempORHdHdkhnQ1NhM3VjMiIsImYiOiJ2TjdsUWxSZDlhZzkwVXlxb1BzZSIsInAiOiIxODIwNTc3NDI0NjM1MDA1NSIsImgiOiJlaWJiczMifQ.jpg?class=squareMedium",
+        "caption": "🇪🇺 Europe is calling! ✈️\n\nGet your Schengen Visa with expert guidance from Skyrush Tourism LLC. Fast, smooth, and hassle-free assistance from start to finish.\n\nStart your Europe journey with confidence and let our experts handle the process for you.\n\n📞 Contact us today and take the first step towards your European adventure!\n\n\n\n\n\n\nEuropeVacation TravelWithConfidence SkyrushTourismLLC",
+        "likes": "10",
+        "comments": "2",
+        "url": "https://www.instagram.com/reel/DZhKxmEMaUs/",
+        "isVideo": true
+      },
+      {
+        "id": "18019939511835256",
+        "image": "https://hop.behold.pictures/eyJ1IjoiT1J1Uk14S0VTbGZBempORHdHdkhnQ1NhM3VjMiIsImYiOiJ2TjdsUWxSZDlhZzkwVXlxb1BzZSIsInAiOiIxODAxOTkzOTUxMTgzNTI1NiIsImgiOiJoeXU3dGoifQ.jpg?class=squareMedium",
+        "caption": "✈️ Explore. Experience. Enjoy. 🌍\n\nYour next adventure starts with SkyRush Tourism!\nFrom luxury holidays to unforgettable travel experiences, we make every journey smooth, exciting, and stress-free. 💙🧡\n\n🌴 Customized Holiday Packages\n🛂 Visa Assistance\n💰 Best Prices Guaranteed\n📞 24/7 Travel Support\n\n📍 B2B Office Tower - Office\nMarasi Dr - Near Kana Cafe\nBusiness Bay, Dubai, UAE\n\n📞 +971 56 793 8033\n\nDream it. Pack it. Live it. ✨\n\nVisaServices ExploreMore LuxuryTravel TravelDubai Wanderlust TourismUAE TravelGoals BusinessBayDubai",
+        "likes": "22",
+        "comments": "0",
+        "url": "https://www.instagram.com/p/DYcmEYdMuN_/",
+        "isVideo": false
+      },
+      {
+        "id": "18162045937431171",
+        "image": "https://hop.behold.pictures/eyJ1IjoiT1J1Uk14S0VTbGZBempORHdHdkhnQ1NhM3VjMiIsImYiOiJ2TjdsUWxSZDlhZzkwVXlxb1BzZSIsInAiOiIxODE2MjA0NTkzNzQzMTE3MSIsImgiOiJhamdpb2cifQ.jpg?class=squareMedium",
+        "caption": "🌎 Your Journey, Our Priority ✈️\nExperience the world with comfort, trust, and unforgettable moments. Whether it’s a family holiday, honeymoon, visa assistance, or luxury getaway — SkyRush Tourism is here for you.\n\n✨ Personalized Travel Solutions\n✨ Exclusive Holiday Deals\n✨ Hassle-Free Planning\n✨ 24/7 Assistance\n\nLet’s make memories together!\n📞 Contact us today for the best travel offers.",
+        "likes": "12",
+        "comments": "0",
+        "url": "https://www.instagram.com/p/DYUQiOvDGvn/",
+        "isVideo": false
+      },
+      {
+        "id": "18007920497876061",
+        "image": "https://hop.behold.pictures/eyJ1IjoiT1J1Uk14S0VTbGZBempORHdHdkhnQ1NhM3VjMiIsImYiOiJ2TjdsUWxSZDlhZzkwVXlxb1BzZSIsInAiOiIxODAwNzkyMDQ5Nzg3NjA2MSIsImgiOiJ1eWVleHYifQ.jpg?class=squareMedium",
+        "caption": "✈️ Travel. Explore. Enjoy. Repeat. 🌍\nCreate unforgettable memories with SkyRush Tourism. From breathtaking destinations to seamless travel planning, we make every journey special.\n\n✅ Worldwide Destinations\n✅ Best Price Guarantee\n✅ 24/7 Customer Support\n✅ Safe & Secure Travel\n\nYour next adventure starts here!\n📩 DM us now to plan your dream vacation.",
+        "likes": "13",
+        "comments": "0",
+        "url": "https://www.instagram.com/p/DYUQaTzDHiR/",
+        "isVideo": false
+      }
+    ]
+  },
+  "users": [
+    {
+      "username": "admin",
+      "salt": "e7120a5f2a18af1204c6e1da4611142e",
+      "hash": "af003d7f6c4d5449961fd6470a41e147140ad4be8f8ee38be2c5f46ad42e1896176eba32bdb91dcd92439b01fb27de7b1e3b7ea5dc8091b2c63d68da3b9cd731",
+      "role": "super_admin"
+    },
+    {
+      "username": "blogger",
+      "salt": "96d5742fb0186f643cfd77aac9f775e1",
+      "hash": "afb5e76a32635722a58b606ceb650047d59b76aa6d9e0a569405bc105f6ffbadd40f9019084000f327571cee2c8c2737685966efffa20b35abaf16858eed795e",
+      "role": "blogger"
+    },
+    {
+      "username": "manager",
+      "salt": "7647ac97ddfe1b3b7e9a6448387a4640",
+      "hash": "dff74c223106e788f8c94c8dc16b0a74981db89b8199173ac3d99140090d2eba98bc0e3a7c123565dc6df104c636059bae5576ba3e895ff7f288a0f49e28dc46",
+      "role": "tour_visa"
+    }
+  ]
+}
