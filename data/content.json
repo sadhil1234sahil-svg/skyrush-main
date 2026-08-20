@@ -136,12 +136,12 @@
       "id": 1,
       "packageCode": "58392",
       "title": "🎉 Almaty, Kazakhstan Tour Package – New Year's Special Offer! 🎉",
-      "duration": "5 Days - 4 Nights",
+      "duration": "4 Days - 3 Nights",
       "location": "Kazakhstan",
       "image": "/Kazakhstan_hero_3.jpg",
       "price": "د.إ3,400",
-      "days": 5,
-      "nights": 4,
+      "days": "4",
+      "nights": "3",
       "country": "Kazakhstan",
       "tourType": "Adventure",
       "hotelCategory": "4-Star Hotel",
@@ -185,11 +185,6 @@
           "day": "Day 4",
           "title": "Free Day or Kok-Tobe Hill",
           "description": "Spend the day shopping at Green Bazaar or take a cable car to Kok-Tobe hill to see the city view."
-        },
-        {
-          "day": "Day 5",
-          "title": "Departure",
-          "description": "After breakfast, transfer to Almaty International Airport for your departure flight."
         }
       ],
       "inclusionsSummary": {
@@ -197,11 +192,11 @@
         "stay": true,
         "breakfast": true,
         "sightseeing": true,
-        "lunch": false,
-        "dinner": false,
+        "lunch": true,
+        "dinner": true,
         "guide": true,
         "flight": true,
-        "visa": false
+        "visa": true
       },
       "offerPrice": "3000"
     },

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function HeroSlider({ sliders = [] }) {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -61,7 +62,7 @@ export default function HeroSlider({ sliders = [] }) {
               </div>
               <h1>{slide.title}</h1>
               <p>{slide.text}</p>
-              <div className="hero-bottom">
+              <div className="hero-bottom" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
                 <a 
                   href="#" 
                   className="primary-btn1"
@@ -69,6 +70,46 @@ export default function HeroSlider({ sliders = [] }) {
                 >
                   {slide.btnText}
                 </a>
+                {(() => {
+                  if (slide.linkedItem) {
+                    const parts = slide.linkedItem.split(':');
+                    const type = parts[0];
+                    const id = parts[1];
+                    const linkUrl = type === 'tour' ? `/tours/${id}` : type === 'visa' ? `/visa/${id}` : null;
+                    if (linkUrl) {
+                      return (
+                        <Link 
+                          to={linkUrl}
+                          style={{ 
+                            display: 'inline-flex', 
+                            alignItems: 'center', 
+                            gap: '6px', 
+                            backgroundColor: 'rgba(255, 255, 255, 0.15)', 
+                            backdropFilter: 'blur(4px)',
+                            color: '#ffffff', 
+                            padding: '12px 24px', 
+                            borderRadius: '30px', 
+                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                            fontWeight: 600,
+                            textDecoration: 'none',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = 'var(--navy)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                            e.currentTarget.style.color = '#ffffff';
+                          }}
+                        >
+                          Learn More <i className="bx bx-right-arrow-alt"></i>
+                        </Link>
+                      );
+                    }
+                  }
+                  return null;
+                })()}
                 {slide.rating && (
                   <div className="hero-rating">
                     <span className="stars">★★★★★</span>

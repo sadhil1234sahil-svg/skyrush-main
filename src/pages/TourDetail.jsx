@@ -301,48 +301,38 @@ export default function TourDetail({ content = {}, currency, rates }) {
           <div className="tour-left-column">
             
             {/* Included In This Package Section */}
-            <div className="package-included-card">
-              <h4>Included In This Package</h4>
-              <div className="included-chips-row">
-                <div className={`inc-chip ${inc.flight !== false ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-plane-alt"></i>
-                  <span>FLIGHTS</span>
-                  <i className={`bx ${inc.flight !== false ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                <div className={`inc-chip ${inc.stay !== false ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-building-house"></i>
-                  <span>HOTEL STAY</span>
-                  <i className={`bx ${inc.stay !== false ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                <div className={`inc-chip ${inc.breakfast !== false ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-restaurant"></i>
-                  <span>BREAKFAST</span>
-                  <i className={`bx ${inc.breakfast !== false ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                <div className={`inc-chip ${inc.sightseeing !== false ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-camera"></i>
-                  <span>SIGHTSEEING</span>
-                  <i className={`bx ${inc.sightseeing !== false ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                <div className={`inc-chip ${inc.transfer !== false ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-car"></i>
-                  <span>TRANSFERS</span>
-                  <i className={`bx ${inc.transfer !== false ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                <div className={`inc-chip ${inc.guide ? 'active' : 'excluded'}`}>
-                  <i className="bx bx-user-voice"></i>
-                  <span>GUIDE</span>
-                  <i className={`bx ${inc.guide ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
-                </div>
-                {visaEnabled && (
-                  <div className={`inc-chip ${inc.visa ? 'active' : 'excluded'}`}>
-                    <i className="bx bx-id-card"></i>
-                    <span>VISA ASSISTANCE</span>
-                    <i className={`bx ${inc.visa ? 'bx-check-circle check' : 'bx-x-circle cross'}`}></i>
+            {(() => {
+              const allItems = content.inclusionItems || [
+                { key: "flight", label: "Flight Included", name: "FLIGHTS", icon: "bx-plane-alt" },
+                { key: "stay", label: "Stay Included", name: "HOTEL STAY", icon: "bx-building-house" },
+                { key: "breakfast", label: "Breakfast Included", name: "BREAKFAST", icon: "bx-restaurant" },
+                { key: "lunch", label: "Lunch Included", name: "LUNCH", icon: "bx-restaurant" },
+                { key: "dinner", label: "Dinner Included", name: "DINNER", icon: "bx-restaurant" },
+                { key: "sightseeing", label: "Sightseeing Included", name: "SIGHTSEEING", icon: "bx-camera" },
+                { key: "transfer", label: "Transfer Included", name: "TRANSFERS", icon: "bx-car" },
+                { key: "guide", label: "Guide Included", name: "GUIDE", icon: "bx-user-voice" },
+                { key: "visa", label: "Visa Included", name: "VISA ASSISTANCE", icon: "bx-id-card" }
+              ];
+              const activeChips = allItems.filter((item) => {
+                if (item.key === 'visa' && !visaEnabled) return false;
+                return !!inc[item.key];
+              });
+              if (activeChips.length === 0) return null;
+              return (
+                <div className="package-included-card">
+                  <h4>Package Highlights</h4>
+                  <div className="included-chips-row">
+                    {activeChips.map((item) => (
+                      <div className="inc-chip active" key={item.key}>
+                        <i className={`bx ${item.icon || 'bx-check'}`}></i>
+                        <span>{item.name || item.key.toUpperCase()}</span>
+                        <i className="bx bx-check-circle check"></i>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              );
+            })()}
 
             {/* Overview Section */}
             <div id="section-overview" className="tour-section-block">

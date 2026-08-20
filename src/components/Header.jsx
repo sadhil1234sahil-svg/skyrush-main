@@ -55,11 +55,19 @@ export default function Header({ contact = {}, isAuthenticated, currency, onCurr
         <div className="container header-inner">
           <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>
             <img 
-              src="https://skyrushtourism.com/wp-content/uploads/2026/05/skyrush-removebg-preview.png" 
+              src="/logo.png" 
               alt="Skyrush Tourism" 
               width="180"
               className="logo-img" 
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
             />
+            <div className="logo-fallback" style={{ display: 'none', alignItems: 'center', gap: '6px', fontFamily: 'var(--font-heading)', fontWeight: 900, fontSize: '22px', color: 'var(--navy)' }}>
+              <span>SKY</span><span style={{ color: 'var(--orange)' }}>RUSH</span>
+              <span style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '1.5px', marginLeft: '2px', opacity: 0.9 }}>TOURISM</span>
+            </div>
           </Link>
           
           {/* Animated Glassmorphic Header Search Bar for Home Page on Scroll */}

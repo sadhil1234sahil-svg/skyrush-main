@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ClassicEditor from '../components/ClassicEditor';
+import ImagePicker from '../components/ImagePicker';
 
 const COUNTRIES_LIST = [
   "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
@@ -34,6 +35,11 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
   const [expandedVisas, setExpandedVisas] = useState({});
   const [expandedBlogs, setExpandedBlogs] = useState({});
   const [tourSearchQuery, setTourSearchQuery] = useState('');
+  const [isWeb3FormsUnlocked, setIsWeb3FormsUnlocked] = useState(false);
+  const [expandedSliders, setExpandedSliders] = useState({});
+  const [newIncLabel, setNewIncLabel] = useState('');
+  const [newIncName, setNewIncName] = useState('');
+  const [newIncIcon, setNewIncIcon] = useState('bx-check');
 
   const generate5DigitCode = (existingCodes = []) => {
     const set = new Set(existingCodes);
@@ -637,6 +643,19 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
       return;
     }
 
+    // Validate sliders fields are all mandatory
+    const invalidSliders = (localContent.sliders || []).some(s => 
+      !s.tag || !s.tag.trim() || 
+      !s.title || !s.title.trim() || 
+      !s.text || !s.text.trim() || 
+      !s.btnText || !s.btnText.trim() || 
+      !s.image || !s.image.trim()
+    );
+    if (invalidSliders) {
+      alert('Error: All fields are mandatory for all Home Slides (Tag, Title, Subtitle, CTA Button text, and Background Image). Please fill all slide fields before saving.');
+      return;
+    }
+
     setIsSaving(true);
     try {
       const res = await fetch('/api/content', {
@@ -712,6 +731,12 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
               onClick={() => setActiveSection('instagram')}
             >
               <i className="bx bxl-instagram"></i> Instagram Gallery
+            </button>
+            <button 
+              className={`admin-nav-item ${activeSection === 'categories' ? 'active' : ''}`}
+              onClick={() => setActiveSection('categories')}
+            >
+              <i className="bx bx-list-ul"></i> Categories Setup
             </button>
           </>
         )}
@@ -845,13 +870,37 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                 />
               </div>
               <div className="admin-input-group" style={{ marginTop: '15px' }}>
-                <label>Web3Forms Access Key</label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <label style={{ margin: 0 }}>Web3Forms Access Key</label>
+                  {!isWeb3FormsUnlocked ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const pass = prompt('Warning: Modifying the Web3Forms Access Key will disable all contact and lead form notifications on the website.\n\nPlease enter the admin password to unlock:');
+                        if (pass === 'skyrush2026') {
+                          setIsWeb3FormsUnlocked(true);
+                        } else if (pass !== null) {
+                          alert('Incorrect password. Access denied.');
+                        }
+                      }}
+                      style={{ padding: '4px 10px', fontSize: '11px', color: '#dc2626', backgroundColor: '#fee2e2', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <i className="bx bx-lock-alt"></i> Unlock Key
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <i className="bx bx-lock-open-alt"></i> Unlocked for Editing
+                    </span>
+                  )}
+                </div>
                 <input 
                   type="text" 
                   className="admin-input" 
                   value={localContent.contact?.web3formsAccessKey || ''} 
                   onChange={(e) => handleContactChange('web3formsAccessKey', e.target.value)} 
                   placeholder="e.g. 12345678-abcd-1234-abcd-1234567890ab"
+                  readOnly={!isWeb3FormsUnlocked}
+                  style={{ backgroundColor: !isWeb3FormsUnlocked ? '#f1f5f9' : '#ffffff', color: !isWeb3FormsUnlocked ? '#64748b' : '#0f172a' }}
                 />
                 <p style={{ fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
                   Register at <a href="https://web3forms.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--orange)', fontWeight: 600 }}>web3forms.com</a> to get your free access key.
@@ -877,19 +926,6 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                     })}
                   />
                 </div>
-                <div className="admin-input-group">
-                  <label>Customer Statistics Counter</label>
-                  <input 
-                    type="text" 
-                    className="admin-input" 
-                    value={localContent.about?.stats || ''} 
-                    onChange={(e) => setLocalContent(prev => {
-                      const copy = { ...prev };
-                      copy.about.stats = e.target.value;
-                      return copy;
-                    })}
-                  />
-                </div>
               </div>
               <div className="admin-input-group" style={{ marginTop: '15px' }}>
                 <label>About Heading Title Text</label>
@@ -904,6 +940,77 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                   })}
                 />
               </div>
+              
+              <div style={{ marginTop: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '15px' }}>
+                <label style={{ fontSize: '13px', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '12px' }}>
+                  📊 Statistics Counter Numbers
+                </label>
+                <div className="admin-grid">
+                  <div className="admin-input-group">
+                    <label>Happy Customers</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      value={localContent.about?.happyCustomers || ''} 
+                      placeholder="e.g. 1695+"
+                      onChange={(e) => setLocalContent(prev => {
+                        const copy = { ...prev };
+                        if (!copy.about) copy.about = {};
+                        copy.about.happyCustomers = e.target.value;
+                        copy.about.stats = e.target.value; // sync legacy value
+                        return copy;
+                      })}
+                    />
+                  </div>
+                  <div className="admin-input-group">
+                    <label>Average Rating</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      value={localContent.about?.averageRating || ''} 
+                      placeholder="e.g. 4.8/5"
+                      onChange={(e) => setLocalContent(prev => {
+                        const copy = { ...prev };
+                        if (!copy.about) copy.about = {};
+                        copy.about.averageRating = e.target.value;
+                        return copy;
+                      })}
+                    />
+                  </div>
+                </div>
+                <div className="admin-grid" style={{ marginTop: '15px' }}>
+                  <div className="admin-input-group">
+                    <label>Travel Destinations</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      value={localContent.about?.travelDestinations || ''} 
+                      placeholder="e.g. 50+"
+                      onChange={(e) => setLocalContent(prev => {
+                        const copy = { ...prev };
+                        if (!copy.about) copy.about = {};
+                        copy.about.travelDestinations = e.target.value;
+                        return copy;
+                      })}
+                    />
+                  </div>
+                  <div className="admin-input-group">
+                    <label>Trips Organized</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      value={localContent.about?.tripsOrganized || ''} 
+                      placeholder="e.g. 1000+"
+                      onChange={(e) => setLocalContent(prev => {
+                        const copy = { ...prev };
+                        if (!copy.about) copy.about = {};
+                        copy.about.tripsOrganized = e.target.value;
+                        return copy;
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         )}
@@ -911,63 +1018,200 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
         {/* 2. HERO SLIDERS CONFIG */}
         {activeSection === 'sliders' && (
           <section>
-            {localContent.sliders?.map((slide, idx) => (
-              <div className="admin-card" key={slide.id}>
-                <div className="admin-card-header">
-                  <h3>Slide #{idx + 1} ({slide.tag})</h3>
-                </div>
-                <div className="admin-grid">
-                  <div className="admin-input-group">
-                    <label>Destination Tag</label>
-                    <input 
-                      type="text" 
-                      className="admin-input" 
-                      value={slide.tag} 
-                      onChange={(e) => handleSliderChange(idx, 'tag', e.target.value)} 
-                    />
-                  </div>
-                  <div className="admin-input-group">
-                    <label>Slide Title Text</label>
-                    <input 
-                      type="text" 
-                      className="admin-input" 
-                      value={slide.title} 
-                      onChange={(e) => handleSliderChange(idx, 'title', e.target.value)} 
-                    />
-                  </div>
-                </div>
-                <div className="admin-input-group" style={{ marginTop: '15px' }}>
-                  <label>Slider Subtitle Paragraph</label>
-                  <textarea 
-                    rows="2"
-                    className="admin-input" 
-                    style={{ fontFamily: 'inherit', resize: 'vertical' }}
-                    value={slide.text} 
-                    onChange={(e) => handleSliderChange(idx, 'text', e.target.value)} 
-                  />
-                </div>
-                <div className="admin-grid" style={{ marginTop: '15px' }}>
-                  <div className="admin-input-group">
-                    <label>CTA Button Content</label>
-                    <input 
-                      type="text" 
-                      className="admin-input" 
-                      value={slide.btnText} 
-                      onChange={(e) => handleSliderChange(idx, 'btnText', e.target.value)} 
-                    />
-                  </div>
-                  <div className="admin-input-group">
-                    <label>Slide Background Image URL</label>
-                    <input 
-                      type="text" 
-                      className="admin-input" 
-                      value={slide.image} 
-                      onChange={(e) => handleSliderChange(idx, 'image', e.target.value)} 
-                    />
-                  </div>
-                </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '15px' }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 800 }}>Home Header Sliders List</h3>
+                <span style={{ fontSize: '12px', color: '#64748b' }}>
+                  Manage slides displayed in the home hero banner. Max 10 slides allowed.
+                </span>
               </div>
-            ))}
+              {(localContent.sliders || []).length < 10 && (
+                <button
+                  type="button"
+                  className="add-btn"
+                  onClick={() => {
+                    setLocalContent((prev) => {
+                      const copy = { ...prev };
+                      const list = copy.sliders ? [...copy.sliders] : [];
+                      if (list.length >= 10) return prev;
+                      
+                      const newId = Date.now().toString();
+                      list.push({
+                        id: newId,
+                        tag: 'New Destination',
+                        title: 'Discover New Places',
+                        text: 'Embark on unforgettable holiday journeys with us.',
+                        btnText: 'Explore Now',
+                        image: ''
+                      });
+                      copy.sliders = list;
+                      
+                      setExpandedSliders(e => ({ ...e, [newId]: true }));
+                      return copy;
+                    });
+                  }}
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '8px 16px', background: '#3b82f6', color: '#ffffff', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                >
+                  <i className="bx bx-plus"></i> Add New Slide
+                </button>
+              )}
+            </div>
+
+            {(localContent.sliders || []).map((slide, idx) => {
+              const isExpanded = expandedSliders[slide.id] !== false;
+              const hasEmptyFields = !slide.tag || !slide.tag.trim() || 
+                                     !slide.title || !slide.title.trim() || 
+                                     !slide.text || !slide.text.trim() || 
+                                     !slide.btnText || !slide.btnText.trim() || 
+                                     !slide.image || !slide.image.trim();
+              
+              return (
+                <div 
+                  className="admin-card" 
+                  key={slide.id || idx}
+                  style={{ border: hasEmptyFields ? '1px solid #fca5a5' : '1px solid #e2e8f0', boxShadow: hasEmptyFields ? '0 4px 12px rgba(239, 68, 68, 0.05)' : 'none' }}
+                >
+                  <div 
+                    className="admin-card-header" 
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
+                    onClick={() => setExpandedSliders(prev => ({ ...prev, [slide.id]: !isExpanded }))}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <i className={`bx bx-chevron-${isExpanded ? 'down' : 'right'}`} style={{ fontSize: '20px', color: '#64748b' }}></i>
+                      <h3 style={{ margin: 0, fontSize: '15px' }}>
+                        Slide #{idx + 1} ({slide.tag || 'Unnamed Slide'})
+                        {hasEmptyFields && (
+                          <span style={{ marginLeft: '10px', fontSize: '11px', background: '#fee2e2', color: '#dc2626', padding: '2px 8px', borderRadius: '10px', fontWeight: 'bold' }}>
+                            ⚠️ Fields Missing
+                          </span>
+                        )}
+                      </h3>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }} onClick={(e) => e.stopPropagation()}>
+                      {(localContent.sliders || []).length > 1 && (
+                        <button
+                          type="button"
+                          className="delete-btn"
+                          onClick={() => {
+                            if (window.confirm(`Are you sure you want to remove Slide #${idx + 1}?`)) {
+                              setLocalContent((prev) => {
+                                const copy = { ...prev };
+                                const list = copy.sliders ? [...copy.sliders] : [];
+                                if (list.length <= 1) return prev;
+                                list.splice(idx, 1);
+                                copy.sliders = list;
+                                return copy;
+                              });
+                            }
+                          }}
+                          style={{ padding: '4px 10px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px', border: 'none', background: '#fee2e2', color: '#ef4444', borderRadius: '4px', cursor: 'pointer' }}
+                        >
+                          <i className="bx bx-trash"></i> Delete
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {isExpanded && (
+                    <div style={{ padding: '20px', borderTop: '1px solid #f1f5f9' }}>
+                      <div className="admin-grid">
+                        <div className="admin-input-group">
+                          <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Destination Tag</span>
+                            {!slide.tag && <span style={{ color: '#ef4444', fontSize: '11px' }}>Required</span>}
+                          </label>
+                          <input 
+                            type="text" 
+                            className="admin-input" 
+                            value={slide.tag} 
+                            onChange={(e) => handleSliderChange(idx, 'tag', e.target.value)} 
+                            placeholder="e.g. Dubai, UAE"
+                            style={{ borderColor: !slide.tag ? '#f87171' : '#cbd5e1' }}
+                          />
+                        </div>
+                        <div className="admin-input-group">
+                          <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>Slide Title Text</span>
+                            {!slide.title && <span style={{ color: '#ef4444', fontSize: '11px' }}>Required</span>}
+                          </label>
+                          <input 
+                            type="text" 
+                            className="admin-input" 
+                            value={slide.title} 
+                            onChange={(e) => handleSliderChange(idx, 'title', e.target.value)} 
+                            placeholder="e.g. Experience Premium Travels"
+                            style={{ borderColor: !slide.title ? '#f87171' : '#cbd5e1' }}
+                          />
+                        </div>
+                      </div>
+                      <div className="admin-input-group" style={{ marginTop: '15px' }}>
+                        <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                          <span>Slider Subtitle Paragraph</span>
+                          {!slide.text && <span style={{ color: '#ef4444', fontSize: '11px' }}>Required</span>}
+                        </label>
+                        <textarea 
+                          rows="2"
+                          className="admin-input" 
+                          style={{ fontFamily: 'inherit', resize: 'vertical', borderColor: !slide.text ? '#f87171' : '#cbd5e1' }}
+                          value={slide.text} 
+                          onChange={(e) => handleSliderChange(idx, 'text', e.target.value)} 
+                          placeholder="Provide a brief slider caption summary..."
+                        />
+                      </div>
+                      <div className="admin-input-group" style={{ marginTop: '15px' }}>
+                        <label>Link to Tour or Visa Package (Optional)</label>
+                        <select 
+                          className="admin-input" 
+                          value={slide.linkedItem || ''} 
+                          onChange={(e) => handleSliderChange(idx, 'linkedItem', e.target.value)}
+                          style={{ background: '#ffffff' }}
+                        >
+                          <option value="">-- None (No Link) --</option>
+                          <optgroup label="Tours">
+                            {(localContent.tours || []).map(t => (
+                              <option key={t.id} value={`tour:${t.id}`}>Tour: {t.title} (#{t.id})</option>
+                            ))}
+                          </optgroup>
+                          <optgroup label="Visas">
+                            {(localContent.visas || []).map(v => (
+                              <option key={v.id} value={`visa:${v.id}`}>Visa: {v.title} (#{v.id})</option>
+                            ))}
+                          </optgroup>
+                        </select>
+                      </div>
+                      <div className="admin-grid" style={{ marginTop: '15px' }}>
+                        <div className="admin-input-group">
+                          <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <span>CTA Button Content</span>
+                            {!slide.btnText && <span style={{ color: '#ef4444', fontSize: '11px' }}>Required</span>}
+                          </label>
+                          <input 
+                            type="text" 
+                            className="admin-input" 
+                            value={slide.btnText} 
+                            onChange={(e) => handleSliderChange(idx, 'btnText', e.target.value)} 
+                            placeholder="e.g. Book Now"
+                            style={{ borderColor: !slide.btnText ? '#f87171' : '#cbd5e1' }}
+                          />
+                        </div>
+                        <ImagePicker
+                          value={slide.image}
+                          onChange={(val) => handleSliderChange(idx, 'image', val)}
+                          label={
+                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                              <span>Slide Background Image</span>
+                              {!slide.image && <span style={{ color: '#ef4444', fontSize: '11px', fontWeight: 'normal' }}>Required</span>}
+                            </div>
+                          }
+                          content={localContent}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </section>
         )}
 
@@ -1113,54 +1357,46 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                       
                       <div className="admin-grid" style={{ marginTop: '15px' }}>
                         <div className="admin-input-group">
-                          <label>Tour Type / Category</label>
+                          <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>Tour Type / Category</span>
+                            <span onClick={() => setActiveSection('categories')} style={{ color: '#2563eb', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', textDecoration: 'underline' }}>⚙ Edit List</span>
+                          </label>
                           <select 
                             className="admin-input" 
                             value={tour.tourType || 'Family'} 
                             onChange={(e) => handleTourChange(idx, 'tourType', e.target.value)}
+                            style={{ background: '#ffffff' }}
                           >
-                            <option value="Family">Family</option>
-                            <option value="Romantic">Romantic</option>
-                            <option value="Adventure">Adventure</option>
-                            <option value="Luxury">Luxury</option>
-                            <option value="Cultural">Cultural</option>
-                            <option value="Honeymoon">Honeymoon</option>
-                            <option value="Group Tour">Group Tour</option>
-                            <option value="Wildlife">Wildlife</option>
-                            <option value="Budget">Budget</option>
+                            {(localContent.tourTypes || ["Family", "Romantic", "Adventure", "Luxury", "Cultural", "Honeymoon", "Group Tour", "Wildlife", "Budget"]).map(type => (
+                              <option key={type} value={type}>{type}</option>
+                            ))}
                           </select>
                         </div>
                         <div className="admin-input-group">
-                          <label>Hotel Stay Category</label>
+                          <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>Hotel Stay Category</span>
+                            <span onClick={() => setActiveSection('categories')} style={{ color: '#2563eb', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', textDecoration: 'underline' }}>⚙ Edit List</span>
+                          </label>
                           <select 
                             className="admin-input" 
                             value={tour.hotelCategory || '4-Star Hotel'} 
                             onChange={(e) => handleTourChange(idx, 'hotelCategory', e.target.value)}
+                            style={{ background: '#ffffff' }}
                           >
-                            <option value="3-Star Hotel">3-Star Hotel</option>
-                            <option value="4-Star Hotel">4-Star Hotel</option>
-                            <option value="5-Star Luxury">5-Star Luxury</option>
-                            <option value="Boutique Stay">Boutique Stay</option>
-                            <option value="Resort">Resort</option>
+                            {(localContent.hotelCategories || ["3-Star Hotel", "4-Star Hotel", "5-Star Luxury", "Boutique Stay", "Resort"]).map(cat => (
+                              <option key={cat} value={cat}>{cat}</option>
+                            ))}
                           </select>
                         </div>
                         <div className="admin-input-group">
-                          <label>Number of Days</label>
+                          <label>Number of Days (Auto-calculated)</label>
                           <input 
                             type="text" 
                             className="admin-input" 
                             value={tour.days || ''} 
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setLocalContent((prev) => {
-                                const copy = { ...prev };
-                                copy.tours[idx].days = val;
-                                const n = copy.tours[idx].nights || '';
-                                copy.tours[idx].duration = n ? `${val} Days - ${n} Nights` : `${val} Days`;
-                                return copy;
-                              });
-                            }} 
-                            placeholder="e.g. 5"
+                            readOnly={true}
+                            style={{ backgroundColor: '#f1f5f9', color: '#64748b', cursor: 'not-allowed' }}
+                            placeholder="Calculated (+1 night)"
                           />
                         </div>
                         <div className="admin-input-group">
@@ -1173,9 +1409,25 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                               const val = e.target.value;
                               setLocalContent((prev) => {
                                 const copy = { ...prev };
+                                const nightsNum = parseInt(val, 10);
+                                const calculatedDays = isNaN(nightsNum) ? '' : (nightsNum + 1).toString();
                                 copy.tours[idx].nights = val;
-                                const d = copy.tours[idx].days || '';
-                                copy.tours[idx].duration = d ? `${d} Days - ${val} Nights` : `${val} Nights`;
+                                copy.tours[idx].days = calculatedDays;
+                                copy.tours[idx].duration = val ? `${calculatedDays} Days - ${val} Nights` : '';
+
+                                // Auto-sync itinerary slots to total days (nights + 1)
+                                if (!isNaN(nightsNum) && nightsNum > 0) {
+                                  const totalDays = nightsNum + 1;
+                                  const existing = copy.tours[idx].itinerary || [];
+                                  copy.tours[idx].itinerary = Array.from({ length: totalDays }, (_, i) => ({
+                                    day: `Day ${i + 1}`,
+                                    title: existing[i]?.title || '',
+                                    description: existing[i]?.description || ''
+                                  }));
+                                } else if (val === '') {
+                                  copy.tours[idx].itinerary = [];
+                                }
+
                                 return copy;
                               });
                             }} 
@@ -1204,15 +1456,12 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                             onChange={(e) => handleTourChange(idx, 'offerPrice', e.target.value)} 
                           />
                         </div>
-                        <div className="admin-input-group">
-                          <label>Package Card Image URL</label>
-                          <input 
-                            type="text" 
-                            className="admin-input" 
-                            value={tour.image} 
-                            onChange={(e) => handleTourChange(idx, 'image', e.target.value)} 
-                          />
-                        </div>
+                        <ImagePicker
+                          value={tour.image}
+                          onChange={(val) => handleTourChange(idx, 'image', val)}
+                          label="Package Card Image"
+                          content={localContent}
+                        />
                       </div>
 
                       {/* Tour Collage Photos (Minimum 3, Maximum 4 Uploads) */}
@@ -1276,13 +1525,9 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                               <label style={{ fontSize: '12px', fontWeight: 700, color: '#475569' }}>
                                 {gIdx === 0 ? 'Photo 1 (Main Featured Photo)' : gIdx === 1 ? 'Photo 2 (Middle View)' : gIdx === 2 ? 'Photo 3 (Property / Landscape View)' : 'Photo 4 (Optional 4th View)'}
                               </label>
-                              <input 
-                                type="text" 
-                                className="admin-input" 
-                                value={currentVal} 
-                                placeholder={`Enter Image URL for Photo ${gIdx + 1}`}
-                                onChange={(e) => {
-                                  const val = e.target.value;
+                              <ImagePicker
+                                value={currentVal}
+                                onChange={(val) => {
                                   setLocalContent((prev) => {
                                     const copy = { ...prev };
                                     const gal = copy.tours[idx].gallery ? [...copy.tours[idx].gallery] : [copy.tours[idx].image || '', '', ''];
@@ -1297,190 +1542,70 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                                     return copy;
                                   });
                                 }}
+                                content={localContent}
                               />
                             </div>
                           );
                         })}
                       </div>
 
-                      {/* Inclusion Summary Dropdowns */}
+                      {/* Inclusion Summary Toggle Chips */}
                       <div style={{ marginTop: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '15px' }}>
 
-                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '8px' }}>
-                          Highlights Inclusion Summary (Drop-downs)
-                        </label>
-                        <div className="admin-grid" style={{ gap: '15px' }}>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Transfer Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.transfer ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.transfer = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Stay Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.stay ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.stay = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Breakfast Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.breakfast ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.breakfast = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Lunch Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.lunch ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.lunch = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Dinner Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.dinner ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.dinner = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Sightseeing Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.sightseeing ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.sightseeing = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Guide Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.guide ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.guide = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Flight Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.flight ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.flight = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
-                          <div className="admin-input-group">
-                            <label style={{ fontSize: '12px' }}>Visa Included</label>
-                            <select 
-                              className="admin-input"
-                              value={tour.inclusionsSummary?.visa ? 'yes' : 'no'}
-                              onChange={(e) => {
-                                const val = e.target.value === 'yes';
-                                setLocalContent((prev) => {
-                                  const copy = { ...prev };
-                                  if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
-                                  copy.tours[idx].inclusionsSummary.visa = val;
-                                  return copy;
-                                });
-                              }}
-                            >
-                              <option value="no">Not Included</option>
-                              <option value="yes">Included</option>
-                            </select>
-                          </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                          <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', margin: 0 }}>
+                            Package Highlights — Select what's Included
+                          </label>
+                          <span onClick={() => setActiveSection('categories')} style={{ color: '#2563eb', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', textDecoration: 'underline' }}>⚙ Edit Options</span>
+                        </div>
+                        <p style={{ fontSize: '11px', color: '#94a3b8', marginBottom: '12px', marginTop: 0 }}>Click to toggle. Green = included on tour page. Grey = not shown.</p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          {(localContent.inclusionItems || [
+                            { key: "flight", label: "Flight Included", name: "FLIGHTS", icon: "bx-plane-alt" },
+                            { key: "stay", label: "Stay Included", name: "HOTEL STAY", icon: "bx-building-house" },
+                            { key: "breakfast", label: "Breakfast Included", name: "BREAKFAST", icon: "bx-restaurant" },
+                            { key: "lunch", label: "Lunch Included", name: "LUNCH", icon: "bx-restaurant" },
+                            { key: "dinner", label: "Dinner Included", name: "DINNER", icon: "bx-restaurant" },
+                            { key: "sightseeing", label: "Sightseeing Included", name: "SIGHTSEEING", icon: "bx-camera" },
+                            { key: "transfer", label: "Transfer Included", name: "TRANSFERS", icon: "bx-car" },
+                            { key: "guide", label: "Guide Included", name: "GUIDE", icon: "bx-user-voice" },
+                            { key: "visa", label: "Visa Included", name: "VISA ASSISTANCE", icon: "bx-id-card" }
+                          ]).map((item) => {
+                            const isActive = !!tour.inclusionsSummary?.[item.key];
+                            return (
+                              <div
+                                key={item.key}
+                                onClick={() => {
+                                  setLocalContent((prev) => {
+                                    const copy = { ...prev };
+                                    if (!copy.tours[idx].inclusionsSummary) copy.tours[idx].inclusionsSummary = {};
+                                    copy.tours[idx].inclusionsSummary[item.key] = !isActive;
+                                    return copy;
+                                  });
+                                }}
+                                title={isActive ? 'Click to remove' : 'Click to include'}
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '6px',
+                                  padding: '7px 14px',
+                                  borderRadius: '20px',
+                                  border: isActive ? '2px solid #16a34a' : '2px solid #cbd5e1',
+                                  background: isActive ? '#f0fdf4' : '#f8fafc',
+                                  color: isActive ? '#15803d' : '#94a3b8',
+                                  fontSize: '12px',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  userSelect: 'none',
+                                  transition: 'all 0.15s ease'
+                                }}
+                              >
+                                <i className={`bx ${item.icon || 'bx-check'}`} style={{ fontSize: '14px' }}></i>
+                                {item.name || item.key.toUpperCase()}
+                                {isActive && <i className="bx bx-check" style={{ fontSize: '14px', color: '#16a34a' }}></i>}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
 
@@ -1495,13 +1620,13 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                         />
                       </div>
 
-                      {/* Technical Specifications */}
+                      {/* Inclusions */}
                       <div style={{ marginTop: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '15px' }}>
-                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
-                          Technical Specifications
+                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#16a34a', display: 'block', marginBottom: '4px' }}>
+                          ✔ What's Included
                         </label>
                         <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>
-                          (List specifications like Lift Capacity, Working Height, Machine Weight, etc.)
+                          (e.g. Return flights, 4-night hotel stay, Daily breakfast, Airport transfers, Sightseeing tours, Entry tickets)
                         </span>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {(tour.inclusions || []).map((inclusion, incIdx) => (
@@ -1536,13 +1661,13 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                         </div>
                       </div>
 
-                      {/* What's Excluded */}
+                      {/* Exclusions */}
                       <div style={{ marginTop: '20px', borderTop: '1px solid #e2e8f0', paddingTop: '15px' }}>
-                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
-                          Standard Features &amp; Options
+                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#dc2626', display: 'block', marginBottom: '4px' }}>
+                          ✗ What's Not Included
                         </label>
                         <span style={{ fontSize: '11px', color: '#64748b', display: 'block', marginBottom: '10px' }}>
-                          (List features such as Solid Tires, Extension Platforms, Alarm Beacons, etc.)
+                          (e.g. Visa fee, Travel insurance, Personal expenses, Tips &amp; gratuities, Optional activities, Meals not mentioned)
                         </span>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                           {(tour.exclusions || []).map((exclusion, excIdx) => (
@@ -1579,70 +1704,78 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
 
                       {/* Itinerary */}
                       <div style={{ marginTop: '25px', borderTop: '1px solid #e2e8f0', paddingTop: '15px' }}>
-                        <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '12px' }}>
-                          Key Operational Systems &amp; Technical Highlights
-                        </label>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                          {(tour.itinerary || []).map((dayObj, dayIdx) => (
-                            <div key={dayIdx} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                <span style={{ fontWeight: 700, fontSize: '12px', color: 'var(--orange)' }}>Day #{dayIdx + 1} Planning</span>
-                                <button 
-                                  type="button" 
-                                  onClick={() => removeItineraryDay(idx, dayIdx)}
-                                  className="delete-btn"
-                                  style={{ padding: '4px 8px', fontSize: '11px' }}
-                                >
-                                  Remove Day
-                                </button>
-                              </div>
-                              
-                              <div className="admin-grid" style={{ gap: '10px' }}>
-                                <div className="admin-input-group" style={{ marginBottom: '8px' }}>
-                                  <label style={{ fontSize: '11px' }}>Day Label (e.g. Day 1)</label>
-                                  <input 
-                                    type="text" 
-                                    className="admin-input" 
-                                    style={{ padding: '8px 12px' }}
-                                    value={dayObj.day || ''} 
-                                    onChange={(e) => handleItineraryChange(idx, dayIdx, 'day', e.target.value)} 
-                                  />
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                          <label style={{ fontSize: '13px', fontWeight: 700, color: '#475569', margin: 0 }}>
+                            Day-by-Day Itinerary
+                          </label>
+                          {(!tour.nights || isNaN(parseInt(tour.nights, 10))) ? (
+                            <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 600 }}>
+                              ⚠ Set &quot;Number of Nights&quot; above to auto-populate days
+                            </span>
+                          ) : (
+                            <span style={{ fontSize: '11px', color: '#16a34a', fontWeight: 600 }}>
+                              ✔ {parseInt(tour.nights, 10) + 1} days auto-generated from {tour.nights} nights
+                            </span>
+                          )}
+                        </div>
+                        {(!tour.itinerary || tour.itinerary.length === 0) ? (
+                          <p style={{ fontSize: '12px', color: '#94a3b8', fontStyle: 'italic', margin: 0 }}>
+                            Enter the number of nights above — day slots will appear here automatically.
+                          </p>
+                        ) : (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            {(tour.itinerary || []).map((dayObj, dayIdx) => (
+                              <div key={dayIdx} style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                                  <span style={{ 
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: 'var(--orange)',
+                                    color: '#fff',
+                                    fontWeight: 800,
+                                    fontSize: '11px',
+                                    borderRadius: '20px',
+                                    padding: '3px 14px',
+                                    whiteSpace: 'nowrap',
+                                    letterSpacing: '0.5px',
+                                    flexShrink: 0
+                                  }}>
+                                    Day {dayIdx + 1}
+                                  </span>
                                 </div>
                                 <div className="admin-input-group" style={{ marginBottom: '8px' }}>
-                                  <label style={{ fontSize: '11px' }}>Activity Title</label>
+                                  <label style={{ fontSize: '11px' }}>
+                                    Activity Title <span style={{ color: '#ef4444' }}>*</span>
+                                  </label>
                                   <input 
                                     type="text" 
                                     className="admin-input" 
-                                    style={{ padding: '8px 12px' }}
+                                    style={{ padding: '7px 12px' }}
+                                    placeholder="e.g. Arrival & City Tour"
+                                    required
                                     value={dayObj.title || ''} 
                                     onChange={(e) => handleItineraryChange(idx, dayIdx, 'title', e.target.value)} 
                                   />
                                 </div>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label style={{ fontSize: '11px' }}>
+                                    Activity Description <span style={{ color: '#ef4444' }}>*</span>
+                                  </label>
+                                  <textarea 
+                                    rows="2"
+                                    className="admin-input" 
+                                    style={{ fontFamily: 'inherit', resize: 'vertical', padding: '8px 12px', width: '100%', boxSizing: 'border-box', marginBottom: 0 }}
+                                    placeholder="Describe the day's schedule and activities..."
+                                    required
+                                    value={dayObj.description || ''} 
+                                    onChange={(e) => handleItineraryChange(idx, dayIdx, 'description', e.target.value)} 
+                                  />
+                                </div>
                               </div>
-                              
-                              <div className="admin-input-group" style={{ marginBottom: '0px', marginTop: '4px' }}>
-                                <label style={{ fontSize: '11px' }}>Activity Description</label>
-                                <textarea 
-                                  rows="2"
-                                  className="admin-input" 
-                                  style={{ fontFamily: 'inherit', resize: 'vertical', padding: '8px 12px' }}
-                                  value={dayObj.description || ''} 
-                                  onChange={(e) => handleItineraryChange(idx, dayIdx, 'description', e.target.value)} 
-                                />
-                              </div>
-                            </div>
-                          ))}
-                          <div>
-                            <button 
-                              type="button" 
-                              onClick={() => addItineraryDay(idx)} 
-                              className="add-btn" 
-                              style={{ padding: '6px 12px', fontSize: '12px', backgroundColor: '#0f172a' }}
-                            >
-                              <i className="bx bx-plus" style={{ marginRight: '4px' }}></i> Add Itinerary Day
-                            </button>
+                            ))}
                           </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* SEO Settings Section */}
@@ -1833,16 +1966,12 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                             onChange={(e) => handleVisaChange(idx, 'offerPrice', e.target.value)} 
                           />
                         </div>
-                        <div className="admin-input-group">
-                          <label>Featured Image URL</label>
-                          <input 
-                            type="text" 
-                            className="admin-input" 
-                            placeholder="e.g. https://skyrushtourism.com/wp-content/uploads/..."
-                            value={visa.image || ''} 
-                            onChange={(e) => handleVisaChange(idx, 'image', e.target.value)} 
-                          />
-                        </div>
+                        <ImagePicker
+                          value={visa.image || ''}
+                          onChange={(val) => handleVisaChange(idx, 'image', val)}
+                          label="Featured Image"
+                          content={localContent}
+                        />
                       </div>
 
                       <div style={{ marginTop: '25px', borderTop: '2px solid #e2e8f0', paddingTop: '20px' }}>
@@ -1994,26 +2123,12 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                             onChange={(e) => handleBlogChange(idx, 'readTime', e.target.value)} 
                           />
                         </div>
-                        <div className="admin-input-group">
-                          <label>Featured Image URL</label>
-                          <input 
-                            type="text" 
-                            className="admin-input" 
-                            value={blog.image} 
-                            onChange={(e) => handleBlogChange(idx, 'image', e.target.value)} 
-                          />
-                        </div>
-                        {blog.image && (
-                          <div className="admin-input-group" style={{ alignItems: 'flex-start' }}>
-                            <label>Featured Image Preview</label>
-                            <img 
-                              src={blog.image} 
-                              alt="Featured Preview" 
-                              style={{ height: '42px', borderRadius: '6px', border: '1px solid #cbd5e1', objectFit: 'cover', maxWidth: '120px' }}
-                              onError={(e) => { e.target.style.display = 'none'; }}
-                            />
-                          </div>
-                        )}
+                        <ImagePicker
+                          value={blog.image}
+                          onChange={(val) => handleBlogChange(idx, 'image', val)}
+                          label="Featured Image"
+                          content={localContent}
+                        />
                       </div>
 
                       <div className="admin-input-group" style={{ marginTop: '15px' }}>
@@ -2136,15 +2251,12 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                     </div>
 
                     <div className="admin-grid">
-                      <div className="admin-input-group">
-                        <label>Image URL</label>
-                        <input 
-                          type="text" 
-                          className="admin-input" 
-                          value={post.image || ''} 
-                          onChange={(e) => handleInstagramPostChange(idx, 'image', e.target.value)} 
-                        />
-                      </div>
+                      <ImagePicker
+                        value={post.image || ''}
+                        onChange={(val) => handleInstagramPostChange(idx, 'image', val)}
+                        label="Image"
+                        content={localContent}
+                      />
                       <div className="admin-input-group">
                         <label>Instagram Post URL</label>
                         <input 
@@ -2324,6 +2436,483 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
                     })}
                   </tbody>
                 </table>
+              </div>
+            </div>
+          </section>
+        )}
+        {activeSection === 'categories' && (
+          <section>
+            <div className="admin-card">
+              <div className="admin-card-header">
+                <h3>Tour Type / Categories Manager</h3>
+              </div>
+              <div style={{ padding: '20px' }}>
+                <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '15px' }}>
+                  Add or remove Tour Type options. These will appear in the Tour Package details dropdown.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+                  <input 
+                    type="text" 
+                    id="new-tour-type"
+                    className="admin-input" 
+                    placeholder="e.g. Wellness"
+                    style={{ flex: 1, backgroundColor: '#ffffff' }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const val = e.target.value.trim();
+                        if (val) {
+                          setLocalContent(prev => {
+                            const copy = { ...prev };
+                            const list = copy.tourTypes ? [...copy.tourTypes] : ["Family", "Romantic", "Adventure", "Luxury", "Cultural", "Honeymoon", "Group Tour", "Wildlife", "Budget"];
+                            if (!list.includes(val)) {
+                              list.push(val);
+                              copy.tourTypes = list;
+                              e.target.value = '';
+                            } else {
+                              alert('Category already exists!');
+                            }
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                  />
+                  <button 
+                    type="button" 
+                    className="add-btn"
+                    onClick={() => {
+                      const input = document.getElementById('new-tour-type');
+                      const val = input.value.trim();
+                      if (val) {
+                        setLocalContent(prev => {
+                          const copy = { ...prev };
+                          const list = copy.tourTypes ? [...copy.tourTypes] : ["Family", "Romantic", "Adventure", "Luxury", "Cultural", "Honeymoon", "Group Tour", "Wildlife", "Budget"];
+                          if (!list.includes(val)) {
+                            list.push(val);
+                            copy.tourTypes = list;
+                            input.value = '';
+                          } else {
+                            alert('Category already exists!');
+                          }
+                          return copy;
+                        });
+                      }
+                    }}
+                  >
+                    Add Category
+                  </button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {(localContent.tourTypes || ["Family", "Romantic", "Adventure", "Luxury", "Cultural", "Honeymoon", "Group Tour", "Wildlife", "Budget"]).map((type) => (
+                    <span 
+                      key={type} 
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f1f5f9', border: '1px solid #cbd5e1', padding: '6px 12px', borderRadius: '20px', fontSize: '13px', fontWeight: 600, color: '#334155' }}
+                    >
+                      {type}
+                      <i 
+                        className="bx bx-x" 
+                        style={{ cursor: 'pointer', color: '#ef4444', fontSize: '16px' }}
+                        onClick={() => {
+                          setLocalContent(prev => {
+                            const copy = { ...prev };
+                            const list = (copy.tourTypes || ["Family", "Romantic", "Adventure", "Luxury", "Cultural", "Honeymoon", "Group Tour", "Wildlife", "Budget"]).filter(t => t !== type);
+                            copy.tourTypes = list;
+                            return copy;
+                          });
+                        }}
+                      ></i>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-card" style={{ marginTop: '20px' }}>
+              <div className="admin-card-header">
+                <h3>Hotel Stay Categories Manager</h3>
+              </div>
+              <div style={{ padding: '20px' }}>
+                <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '15px' }}>
+                  Add or remove Hotel Stay Category options. These will appear in the Tour Package details dropdown.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+                  <input 
+                    type="text" 
+                    id="new-hotel-category"
+                    className="admin-input" 
+                    placeholder="e.g. Standard"
+                    style={{ flex: 1, backgroundColor: '#ffffff' }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        const val = e.target.value.trim();
+                        if (val) {
+                          setLocalContent(prev => {
+                            const copy = { ...prev };
+                            const list = copy.hotelCategories ? [...copy.hotelCategories] : ["3-Star Hotel", "4-Star Hotel", "5-Star Luxury", "Boutique Stay", "Resort"];
+                            if (!list.includes(val)) {
+                              list.push(val);
+                              copy.hotelCategories = list;
+                              e.target.value = '';
+                            } else {
+                              alert('Category already exists!');
+                            }
+                            return copy;
+                          });
+                        }
+                      }
+                    }}
+                  />
+                  <button 
+                    type="button" 
+                    className="add-btn"
+                    onClick={() => {
+                      const input = document.getElementById('new-hotel-category');
+                      const val = input.value.trim();
+                      if (val) {
+                        setLocalContent(prev => {
+                          const copy = { ...prev };
+                          const list = copy.hotelCategories ? [...copy.hotelCategories] : ["3-Star Hotel", "4-Star Hotel", "5-Star Luxury", "Boutique Stay", "Resort"];
+                          if (!list.includes(val)) {
+                            list.push(val);
+                            copy.hotelCategories = list;
+                            input.value = '';
+                          } else {
+                            alert('Category already exists!');
+                          }
+                          return copy;
+                        });
+                      }
+                    }}
+                  >
+                    Add Category
+                  </button>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                  {(localContent.hotelCategories || ["3-Star Hotel", "4-Star Hotel", "5-Star Luxury", "Boutique Stay", "Resort"]).map((cat) => (
+                    <span 
+                      key={cat} 
+                      style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f1f5f9', border: '1px solid #cbd5e1', padding: '6px 12px', borderRadius: '20px', fontSize: '13px', fontWeight: 600, color: '#334155' }}
+                    >
+                      {cat}
+                      <i 
+                        className="bx bx-x" 
+                        style={{ cursor: 'pointer', color: '#ef4444', fontSize: '16px' }}
+                        onClick={() => {
+                          setLocalContent(prev => {
+                            const copy = { ...prev };
+                            const list = (copy.hotelCategories || ["3-Star Hotel", "4-Star Hotel", "5-Star Luxury", "Boutique Stay", "Resort"]).filter(c => c !== cat);
+                            copy.hotelCategories = list;
+                            return copy;
+                          });
+                        }}
+                      ></i>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-card" style={{ marginTop: '20px' }}>
+              <div className="admin-card-header">
+                <h3>Highlights Inclusion Summary (Drop-downs) Manager</h3>
+              </div>
+              <div style={{ padding: '20px' }}>
+                <p style={{ fontSize: '13px', color: '#64748b', marginBottom: '15px' }}>
+                  Manage the options that show in the "Highlights Inclusion Summary" dropdowns inside the Tour Package editor and details page.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: '15px', alignItems: 'end', marginBottom: '15px' }}>
+                  <div className="admin-input-group" style={{ margin: 0 }}>
+                    <label style={{ fontSize: '11px' }}>Dropdown Option Label</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      placeholder="e.g. Insurance Included"
+                      value={newIncLabel}
+                      onChange={(e) => setNewIncLabel(e.target.value)}
+                      style={{ backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div className="admin-input-group" style={{ margin: 0 }}>
+                    <label style={{ fontSize: '11px' }}>UI Badge Name</label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      placeholder="e.g. INSURANCE"
+                      value={newIncName}
+                      onChange={(e) => setNewIncName(e.target.value)}
+                      style={{ backgroundColor: '#ffffff' }}
+                    />
+                  </div>
+                  <div className="admin-input-group" style={{ margin: 0 }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px' }}>
+                      <span>Selected Icon Class</span>
+                      {newIncIcon && <i className={`bx ${newIncIcon}`} style={{ fontSize: '15px', color: '#2563eb' }}></i>}
+                    </label>
+                    <input 
+                      type="text" 
+                      className="admin-input" 
+                      value={newIncIcon}
+                      readOnly
+                      style={{ backgroundColor: '#f1f5f9', cursor: 'not-allowed', color: '#64748b' }}
+                    />
+                  </div>
+                  <button 
+                    type="button" 
+                    className="add-btn"
+                    onClick={() => {
+                      const labelVal = newIncLabel.trim();
+                      const nameVal = newIncName.trim();
+                      const iconVal = newIncIcon;
+                      
+                      if (labelVal && nameVal) {
+                        const keyVal = nameVal.toLowerCase().replace(/[^a-z0-9]/g, '');
+                        if (!keyVal) {
+                          alert('Invalid Badge Name! Please use alphanumeric characters.');
+                          return;
+                        }
+                        
+                        setLocalContent(prev => {
+                          const copy = { ...prev };
+                          const list = copy.inclusionItems ? [...copy.inclusionItems] : [
+                            { key: "flight", label: "Flight Included", name: "FLIGHTS", icon: "bx-plane-alt" },
+                            { key: "stay", label: "Stay Included", name: "HOTEL STAY", icon: "bx-building-house" },
+                            { key: "breakfast", label: "Breakfast Included", name: "BREAKFAST", icon: "bx-restaurant" },
+                            { key: "lunch", label: "Lunch Included", name: "LUNCH", icon: "bx-restaurant" },
+                            { key: "dinner", label: "Dinner Included", name: "DINNER", icon: "bx-restaurant" },
+                            { key: "sightseeing", label: "Sightseeing Included", name: "SIGHTSEEING", icon: "bx-camera" },
+                            { key: "transfer", label: "Transfer Included", name: "TRANSFERS", icon: "bx-car" },
+                            { key: "guide", label: "Guide Included", name: "GUIDE", icon: "bx-user-voice" },
+                            { key: "visa", label: "Visa Included", name: "VISA ASSISTANCE", icon: "bx-id-card" }
+                          ];
+                          
+                          if (!list.some(item => item.key === keyVal)) {
+                            list.push({ key: keyVal, label: labelVal, name: nameVal, icon: iconVal || 'bx-check' });
+                            copy.inclusionItems = list;
+                            
+                            // Reset form states
+                            setNewIncLabel('');
+                            setNewIncName('');
+                            setNewIncIcon('bx-check');
+                          } else {
+                            alert('An option with this key already exists!');
+                          }
+                          return copy;
+                        });
+                      } else {
+                        alert('Dropdown Label and UI Badge Name are required!');
+                      }
+                    }}
+                    style={{ height: '42px' }}
+                  >
+                    Add Option
+                  </button>
+                </div>
+
+                {/* VISUAL BOXICONS GALLERY */}
+                {(() => {
+                  const POPULAR_BOXICONS = [
+                    // Transportation
+                    { name: 'Flight / Airplane (Alt)', class: 'bx-plane-alt' },
+                    { name: 'Flight / Airplane', class: 'bx-plane' },
+                    { name: 'Car / Transfers', class: 'bx-car' },
+                    { name: 'Taxi / Cab', class: 'bx-taxi' },
+                    { name: 'Train / Railway', class: 'bx-train' },
+                    { name: 'Bus / Coach', class: 'bx-bus' },
+                    { name: 'Ship / Cruise', class: 'bx-ship' },
+                    { name: 'Bicycle Tour', class: 'bx-cycling' },
+                    { name: 'Walking Tour', class: 'bx-walk' },
+                    { name: 'Compass / Outdoor', class: 'bx-compass' },
+                    
+                    // Stay & Places
+                    { name: 'Hotel / Stay', class: 'bx-building-house' },
+                    { name: 'Villa / Home', class: 'bx-home' },
+                    { name: 'Landmark / Monument', class: 'bx-landmark' },
+                    { name: 'Temple / Church', class: 'bx-church' },
+                    { name: 'Castle / History', class: 'bx-castle' },
+                    { name: 'Sightseeing / Photo', class: 'bx-camera' },
+                    { name: 'Video / Drone', class: 'bx-video' },
+                    { name: 'Sun / Weather', class: 'bx-sun' },
+                    { name: 'Beach / Sea', class: 'bx-water' },
+                    { name: 'Location Pin', class: 'bx-map-pin' },
+                    { name: 'Map View', class: 'bx-map' },
+                    { name: 'Signposts / Directions', class: 'bx-directions' },
+                    
+                    // Food & Drinks
+                    { name: 'Restaurant / Dining', class: 'bx-restaurant' },
+                    { name: 'Cafe / Coffee', class: 'bx-coffee' },
+                    { name: 'Cocktail / Bar', class: 'bx-drink' },
+                    { name: 'Wine Tasting', class: 'bx-wine' },
+                    { name: 'Beer / Pub', class: 'bx-beer' },
+                    { name: 'Shopping stops', class: 'bx-shopping-bag' },
+                    { name: 'Local Store', class: 'bx-store' },
+                    
+                    // Activities & Support
+                    { name: 'Swimming Pool', class: 'bx-swim' },
+                    { name: 'Hiking / Run', class: 'bx-run' },
+                    { name: 'Visa Assistance', class: 'bx-id-card' },
+                    { name: 'Travel Insurance / Shield', class: 'bx-shield' },
+                    { name: '24/7 Support Helpline', class: 'bx-support' },
+                    { name: 'Local Tour Guide', class: 'bx-user-voice' },
+                    { name: 'Schedule / Calendar', class: 'bx-calendar' },
+                    { name: 'Itinerary Event', class: 'bx-calendar-event' },
+                    { name: 'Wallet / Budget', class: 'bx-wallet' },
+                    { name: 'Receipt / Ticket', class: 'bx-receipt' },
+                    { name: 'Freebies / Gift', class: 'bx-gift' },
+                    { name: 'First Aid / Health', class: 'bx-first-aid' },
+                    { name: 'Time / Clock', class: 'bx-time' },
+                    { name: 'Star rating', class: 'bx-star' },
+                    { name: 'Worldwide / Globe', class: 'bx-globe' },
+                    { name: 'Free WiFi', class: 'bx-wifi' },
+                    { name: 'Local Sim / Call', class: 'bx-phone-call' }
+                  ];
+
+                  return (
+                    <div style={{ marginBottom: '25px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <label style={{ fontSize: '12px', fontWeight: 'bold', color: '#475569', display: 'block', marginBottom: '8px' }}>
+                        ✨ Visual Icon Gallery Picker (Click to Select)
+                      </label>
+                      <div style={{ 
+                        display: 'grid', 
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(44px, 1fr))', 
+                        gap: '6px', 
+                        maxHeight: '120px', 
+                        overflowY: 'auto', 
+                        background: '#ffffff', 
+                        border: '1px solid #cbd5e1', 
+                        padding: '10px', 
+                        borderRadius: '8px' 
+                      }}>
+                        {POPULAR_BOXICONS.map((item) => {
+                          const isSelected = newIncIcon === item.class;
+                          return (
+                            <div 
+                              key={item.class}
+                              title={item.name}
+                              onClick={() => setNewIncIcon(item.class)}
+                              style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                justifyContent: 'center', 
+                                height: '36px', 
+                                borderRadius: '6px', 
+                                border: isSelected ? '2px solid #2563eb' : '1px solid #cbd5e1', 
+                                background: isSelected ? '#eff6ff' : '#f8fafc',
+                                cursor: 'pointer',
+                                fontSize: '18px',
+                                color: isSelected ? '#2563eb' : '#475569',
+                                transition: 'all 0.15s ease'
+                              }}
+                            >
+                              <i className={`bx ${item.class}`}></i>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Custom icon paste input */}
+                      <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ flex: 1 }}>
+                          <p style={{ margin: '0 0 6px 0', fontSize: '11px', color: '#64748b' }}>
+                            Can't find your icon above? Browse{' '}
+                            <a href="https://boxicons.com" target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb', fontWeight: 700, textDecoration: 'underline' }}>
+                              boxicons.com
+                            </a>
+                            {' '}→ hover any icon → copy the class name (e.g. <code style={{ background: '#f1f5f9', padding: '1px 5px', borderRadius: '3px', fontSize: '11px' }}>bx-anchor</code>) → paste below.
+                          </p>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input
+                              type="text"
+                              className="admin-input"
+                              placeholder="Paste icon class e.g. bx-anchor"
+                              style={{ flex: 1, backgroundColor: '#ffffff', fontSize: '12px' }}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  const val = e.target.value.trim().replace(/^bx\s+/, '').replace(/^bx-/, '');
+                                  if (val) {
+                                    setNewIncIcon(`bx-${val}`);
+                                    e.target.value = '';
+                                  }
+                                }
+                              }}
+                            />
+                            <button
+                              type="button"
+                              className="add-btn"
+                              style={{ padding: '8px 16px', fontSize: '12px', whiteSpace: 'nowrap' }}
+                              onClick={(e) => {
+                                const input = e.target.closest('div').querySelector('input');
+                                const val = input.value.trim().replace(/^bx\s+/, '').replace(/^bx-/, '');
+                                if (val) {
+                                  setNewIncIcon(`bx-${val}`);
+                                  input.value = '';
+                                }
+                              }}
+                            >
+                              Use This Icon
+                            </button>
+                            {newIncIcon && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '6px 12px', background: '#eff6ff', borderRadius: '6px', border: '1px solid #bfdbfe', fontSize: '12px', color: '#1d4ed8', fontWeight: 600, whiteSpace: 'nowrap' }}>
+                                <i className={`bx ${newIncIcon}`} style={{ fontSize: '16px' }}></i>
+                                {newIncIcon}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
+                  {(localContent.inclusionItems || [
+                    { key: "flight", label: "Flight Included", name: "FLIGHTS", icon: "bx-plane-alt" },
+                    { key: "stay", label: "Stay Included", name: "HOTEL STAY", icon: "bx-building-house" },
+                    { key: "breakfast", label: "Breakfast Included", name: "BREAKFAST", icon: "bx-restaurant" },
+                    { key: "lunch", label: "Lunch Included", name: "LUNCH", icon: "bx-restaurant" },
+                    { key: "dinner", label: "Dinner Included", name: "DINNER", icon: "bx-restaurant" },
+                    { key: "sightseeing", label: "Sightseeing Included", name: "SIGHTSEEING", icon: "bx-camera" },
+                    { key: "transfer", label: "Transfer Included", name: "TRANSFERS", icon: "bx-car" },
+                    { key: "guide", label: "Guide Included", name: "GUIDE", icon: "bx-user-voice" },
+                    { key: "visa", label: "Visa Included", name: "VISA ASSISTANCE", icon: "bx-id-card" }
+                  ]).map((item) => (
+                    <div 
+                      key={item.key} 
+                      style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', border: '1px solid #cbd5e1', padding: '10px 14px', borderRadius: '8px' }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <i className={`bx ${item.icon}`} style={{ fontSize: '18px', color: '#475569' }}></i>
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 700, color: '#1e293b' }}>{item.name}</div>
+                          <div style={{ fontSize: '11px', color: '#64748b' }}>{item.label}</div>
+                        </div>
+                      </div>
+                      <i 
+                        className="bx bx-trash" 
+                        style={{ cursor: 'pointer', color: '#ef4444', fontSize: '16px' }}
+                        onClick={() => {
+                          if (window.confirm(`Warning: Deleting "${item.name}" will hide this summary option from existing Tour detail pages.\n\nAre you sure you want to remove it?`)) {
+                            setLocalContent(prev => {
+                              const copy = { ...prev };
+                              const list = (copy.inclusionItems || [
+                                { key: "flight", label: "Flight Included", name: "FLIGHTS", icon: "bx-plane-alt" },
+                                { key: "stay", label: "Stay Included", name: "HOTEL STAY", icon: "bx-building-house" },
+                                { key: "breakfast", label: "Breakfast Included", name: "BREAKFAST", icon: "bx-restaurant" },
+                                { key: "lunch", label: "Lunch Included", name: "LUNCH", icon: "bx-restaurant" },
+                                { key: "dinner", label: "Dinner Included", name: "DINNER", icon: "bx-restaurant" },
+                                { key: "sightseeing", label: "Sightseeing Included", name: "SIGHTSEEING", icon: "bx-camera" },
+                                { key: "transfer", label: "Transfer Included", name: "TRANSFERS", icon: "bx-car" },
+                                { key: "guide", label: "Guide Included", name: "GUIDE", icon: "bx-user-voice" },
+                                { key: "visa", label: "Visa Included", name: "VISA ASSISTANCE", icon: "bx-id-card" }
+                              ]).filter(i => i.key !== item.key);
+                              copy.inclusionItems = list;
+                              return copy;
+                            });
+                          }
+                        }}
+                      ></i>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </section>

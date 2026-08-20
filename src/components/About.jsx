@@ -58,7 +58,7 @@ export default function About({ about = {} }) {
             <div className="stat-item">
               <i className="bx bx-group stat-icon"></i>
               <div className="stat-info">
-                <span className="stat-val">1695+</span>
+                <span className="stat-val">{about.happyCustomers || about.stats || '1695+'}</span>
                 <span className="stat-lbl">Happy Customers</span>
               </div>
             </div>
@@ -66,7 +66,7 @@ export default function About({ about = {} }) {
             <div className="stat-item">
               <i className="bx bx-star stat-icon"></i>
               <div className="stat-info">
-                <span className="stat-val">4.8/5</span>
+                <span className="stat-val">{about.averageRating || '4.8/5'}</span>
                 <span className="stat-lbl">Average Rating</span>
               </div>
             </div>
@@ -74,7 +74,7 @@ export default function About({ about = {} }) {
             <div className="stat-item">
               <i className="bx bx-map stat-icon"></i>
               <div className="stat-info">
-                <span className="stat-val">50+</span>
+                <span className="stat-val">{about.travelDestinations || '50+'}</span>
                 <span className="stat-lbl">Travel Destinations</span>
               </div>
             </div>
@@ -82,7 +82,7 @@ export default function About({ about = {} }) {
             <div className="stat-item">
               <i className="bx bx-camera stat-icon"></i>
               <div className="stat-info">
-                <span className="stat-val">1000+</span>
+                <span className="stat-val">{about.tripsOrganized || '1000+'}</span>
                 <span className="stat-lbl">Trips Organized</span>
               </div>
             </div>
@@ -127,7 +127,7 @@ export default function About({ about = {} }) {
 
           {/* Floating Badge */}
           <div className="collage-badge">
-            <span className="badge-num">1695+</span>
+            <span className="badge-num">{about.happyCustomers || about.stats || '1695+'}</span>
             <span className="badge-lbl">Happy<br/>Travelers</span>
           </div>
         </div>

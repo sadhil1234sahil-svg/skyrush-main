@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import CtaModal from './components/CtaModal';
@@ -23,6 +23,7 @@ import Login from './pages/Login';
 import BlogDetail from './pages/BlogDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfUse from './pages/TermsOfUse';
+import SchengenLanding from './pages/SchengenLanding';
 
 export default function App() {
   const [content, setContent] = useState(defaultContent);
@@ -178,6 +179,7 @@ export default function App() {
 
   return (
     <Router>
+      <DoubleSlashRedirect />
       <div className="site-wrapper">
         <Header 
           contact={contact} 
@@ -206,6 +208,7 @@ export default function App() {
             <Route path="/blogs/:id" element={<BlogDetail content={content} />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy content={content} />} />
             <Route path="/terms-of-use" element={<TermsOfUse content={content} />} />
+            <Route path="/schengen" element={<SchengenLanding content={content} />} />
             
             {/* Secure Admin Portal Routes */}
             <Route path="/login" element={<Login onLogin={handleLogin} content={content} />} />
@@ -251,4 +254,12 @@ export default function App() {
       </div>
     </Router>
   );
+}
+
+function DoubleSlashRedirect() {
+  const location = useLocation();
+  if (location.pathname.includes('//')) {
+    return <Navigate to={location.pathname.replace(/\/+/g, '/')} replace />;
+  }
+  return null;
 }
