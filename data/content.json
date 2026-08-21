@@ -956,6 +956,138 @@
       }
     ]
   },
+  "trackingSnippets": [],
+  "landingPages": [
+    {
+      "id": "schengen-default",
+      "slug": "schengen",
+      "seoTitle": "Schengen Entry Clearance & Travel Access Consultants | Skyrush Tourism",
+      "seoDescription": "Expert Schengen travel permit consultancy for UAE residents. Professional assistance for VFS/TLS appointments, document preparation, hotel bookings, and travel insurance.",
+      "heroTagline": "Premium Schengen Travel Advisory",
+      "heroTitle": "Unlock Seamless Entry To 29 European Countries",
+      "heroSubtitle": "Leading entry clearance & travel access consultants for UAE residents. We coordinate VFS/TLS appointments, compile 100% compliant documentation, flight reserves, hotel bookings, and required travel insurance.",
+      "heroBtnText": "Free Assessment",
+      "whatsappNumber": "+971567938033",
+      "whatsappMessage": "Hello SkyRush Team, I would like to consult regarding Schengen",
+      "phoneNumber": "+971567938033",
+      "clearanceRate": "98.8%",
+      "appointmentSupport": "VFS & TLS",
+      "insuranceLimit": "30K EUR",
+      "whySectionTitle": "Why Consult With Us?",
+      "whySectionDesc": "Navigating European travel requirements can be complicated. Our team ensures your files are perfect.",
+      "whyCards": [
+        {
+          "icon": "fa-solid fa-calendar-check",
+          "title": "VFS / TLS Booking Support",
+          "text": "We monitor and secure fast-track slots for biometrics and file submissions across European consulates."
+        },
+        {
+          "icon": "fa-solid fa-folder-open",
+          "title": "Compliant Documents",
+          "text": "We review your financial certificates, bank transcripts, and employer letters to verify they match consulate criteria."
+        },
+        {
+          "icon": "fa-solid fa-map-location-dot",
+          "title": "Itinerary Formats",
+          "text": "Get confirmed flight bookings, verifiable hotel vouchers, and detailed travel schedules that meet entry rules."
+        },
+        {
+          "icon": "fa-solid fa-user-shield",
+          "title": "Travel Insurance coordination",
+          "text": "All-inclusive Schengen approved coverage starting from €30,000 to keep you protected throughout your travel."
+        }
+      ],
+      "stepsSectionTag": "✨ APPLICATION STEPS",
+      "stepsSectionTitle": "Our Simplified Consulting Flow",
+      "stepsSectionDesc": "We guide you step-by-step to compile the perfect travel permit application, secure slot booking, and ensure seamless European entry.",
+      "steps": [
+        {
+          "id": 1,
+          "icon": "bx bx-search-alt",
+          "title": "Profile Assessment",
+          "text": "We review your residency status, passport validity, and bank statement health to identify the best European consulate for your entry."
+        },
+        {
+          "id": 2,
+          "icon": "bx bx-file",
+          "title": "Document Prep",
+          "text": "We compile your cover letter, flight reservations, verified hotel vouchers, and Schengen-compliant travel insurance policy."
+        },
+        {
+          "id": 3,
+          "icon": "bx bx-calendar",
+          "title": "Appointment Booking",
+          "text": "We monitor slot availability daily and secure your biometric appointment at the corresponding VFS Global or TLS Contact center."
+        },
+        {
+          "id": 4,
+          "icon": "bx bx-badge-check",
+          "title": "Submission Brief",
+          "text": "We perform a detailed pre-submission run-through so you walk into your biometric slot with a 100% compliant documentation packet."
+        }
+      ],
+      "testimonials": [
+        {
+          "id": 1,
+          "category": "Google",
+          "quote": "Extremely professional team. They guided me through the complex Schengen document checklist and booked my appointments. Very satisfied.",
+          "author": "Rahul Verma",
+          "location": "India",
+          "avatar": "https://i.pravatar.cc/80?img=68",
+          "meta": "Oct 14, 2024 · 02:10 PM"
+        },
+        {
+          "id": 2,
+          "category": "Tripadvisor",
+          "quote": "Highly recommend Skyrush for European travel permits. They got us appointment slots for Italy TLS when none were available online. Their documentation checklists are extremely precise.",
+          "author": "Maria Santos",
+          "location": "Philippines",
+          "avatar": "https://i.pravatar.cc/80?img=20",
+          "meta": "June 1, 2025 · 04:30 PM"
+        },
+        {
+          "id": 3,
+          "category": "Facebook",
+          "quote": "Exceptional support! They prepared our flight bookings, hotel reservations, and travel insurance coverage within a few hours. The entire submission process at VFS was stress-free.",
+          "author": "Arthur Pendelton",
+          "location": "United Kingdom",
+          "avatar": "https://i.pravatar.cc/80?img=33",
+          "meta": "Jan 22, 2025 · 11:20 AM"
+        },
+        {
+          "id": 4,
+          "category": "Google",
+          "quote": "Got my Schengen travel access permit approved for Switzerland! The cover letter draft they prepared was professional and detailed. Outstanding travel clearance service in Dubai.",
+          "author": "Sandra Valencian",
+          "location": "India",
+          "avatar": "https://i.pravatar.cc/80?img=5",
+          "meta": "Apr 4, 2025 · 10:30 PM"
+        },
+        {
+          "id": 5,
+          "category": "Google",
+          "quote": "Professional entry clearance consultants. I was worried about my financial proofs, but they assessed my profile and guided me on how to present it correctly. Approved in no time.",
+          "author": "John Davis",
+          "location": "United States",
+          "avatar": "https://i.pravatar.cc/80?img=12",
+          "meta": "May 12, 2025 · 09:15 AM"
+        },
+        {
+          "id": 6,
+          "category": "Facebook",
+          "quote": "Super fast response on WhatsApp. They coordinated our entire family documentation and scheduled our VFS slots for Spain. Will definitely use them for our next European vacation.",
+          "author": "Chloe Lim",
+          "location": "Singapore",
+          "avatar": "https://i.pravatar.cc/80?img=47",
+          "meta": "March 5, 2025 · 08:45 PM"
+        }
+      ],
+      "formTitle": "Schedule Your Profile Analysis",
+      "formDesc": "Fill out this form to connect with our senior travel access consultants. We will evaluate your profile and advise on VFS slot availability immediately.",
+      "formDisclaimer": "Please Note: We assist with tourist, business, and transit entry clearances only. We do not cater to labor, work permit, or employment requests.",
+      "packageName": "Schengen Tourist Appointment & Documentation"
+    }
+  ],
   "users": [
     {
       "username": "admin",

@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
+import { useParams, Navigate } from 'react-router-dom';
 import useSEO from '../hooks/useSEO';
 import About from '../components/About';
 import Testimonials from '../components/Testimonials';
 
-const schengenTestimonials = [
+const defaultTestimonials = [
   {
     id: 1,
     category: "Google",
@@ -61,7 +62,82 @@ const schengenTestimonials = [
 ];
 
 export default function SchengenLanding({ content = {} }) {
+  const { landingSlug } = useParams();
   const contact = content.contact || {};
+
+  const activeSlug = landingSlug || 'schengen';
+  const page = (content.landingPages || []).find(p => p.slug === activeSlug);
+
+
+
+  // Fallback defaults
+  const seoTitle = page?.seoTitle || 'Schengen Entry Clearance & Travel Access Consultants | Skyrush Tourism';
+  const seoDescription = page?.seoDescription || 'Expert Schengen travel permit consultancy for UAE residents. Professional assistance for VFS/TLS appointments, document preparation, hotel bookings, and travel insurance.';
+  const heroTagline = page?.heroTagline || 'Premium Schengen Travel Advisory';
+  const heroTitle = page?.heroTitle || 'Unlock Seamless Entry To <span class="accent-text">29 European Countries</span>';
+  const heroSubtitle = page?.heroSubtitle || 'Leading entry clearance & travel access consultants for UAE residents. We coordinate VFS/TLS appointments, compile 100% compliant documentation, flight reserves, hotel bookings, and required travel insurance.';
+  const heroBtnText = page?.heroBtnText || 'Free Assessment';
+
+  // Contacts
+  const cleanWhatsapp = (page?.whatsappNumber || contact.whatsapp || '+971567938033').replace(/[^\d]/g, '');
+  const cleanPhone = (page?.phoneNumber || contact.phoneCall || '+971567938033').replace(/[^\d]/g, '');
+  const displayPhone = page?.phoneNumber || contact.phone || '+971 56 793 8033';
+
+  // WhatsApp Message Preset
+  const whatsappMsgPreset = page?.whatsappMessage || 'Hello, I would like to consult regarding Schengen Entry Clearance.';
+  const whatsappLink = `https://api.whatsapp.com/send/?phone=${cleanWhatsapp}&text=${encodeURIComponent(whatsappMsgPreset)}`;
+
+  // Trust Highlights
+  const clearanceRate = page?.clearanceRate || '98.8%';
+  const appointmentSupport = page?.appointmentSupport || 'VFS & TLS';
+  const insuranceLimit = page?.insuranceLimit || '30K EUR';
+
+  // Why Consult With Us Section
+  const whySectionTitle = page?.whySectionTitle || 'Why Consult With Us?';
+  const whySectionDesc = page?.whySectionDesc || 'Navigating European travel requirements can be complicated. Our team ensures your files are perfect.';
+  const whyCards = page?.whyCards || [
+    {
+      icon: "fa-solid fa-calendar-check",
+      title: "VFS / TLS Booking Support",
+      text: "We monitor and secure fast-track slots for biometrics and file submissions across European consulates."
+    },
+    {
+      icon: "fa-solid fa-folder-open",
+      title: "Compliant Documents",
+      text: "We review your financial certificates, bank transcripts, and employer letters to verify they match consulate criteria."
+    },
+    {
+      icon: "fa-solid fa-map-location-dot",
+      title: "Itinerary Formats",
+      text: "Get confirmed flight bookings, verifiable hotel vouchers, and detailed travel schedules that meet entry rules."
+    },
+    {
+      icon: "fa-solid fa-user-shield",
+      title: "Travel Insurance coordination",
+      text: "All-inclusive Schengen approved coverage starting from €30,000 to keep you protected throughout your travel."
+    }
+  ];
+
+  // Simplified Consulting Flow
+  const stepsSectionTag = page?.stepsSectionTag || '✨ APPLICATION STEPS';
+  const stepsSectionTitle = page?.stepsSectionTitle || 'Our Simplified Consulting Flow';
+  const stepsSectionDesc = page?.stepsSectionDesc || 'We guide you step-by-step to compile the perfect travel permit application, secure slot booking, and ensure seamless European entry.';
+  const steps = page?.steps || [
+    { id: 1, icon: "bx bx-search-alt", title: "Profile Assessment", text: "We review your residency status, passport validity, and bank statement health to identify the best European consulate for your entry." },
+    { id: 2, icon: "bx bx-file", title: "Document Prep", text: "We compile your cover letter, flight reservations, verified hotel vouchers, and Schengen-compliant travel insurance policy." },
+    { id: 3, icon: "bx bx-calendar", title: "Appointment Booking", text: "We monitor slot availability daily and secure your biometric appointment at the corresponding VFS Global or TLS Contact center." },
+    { id: 4, icon: "bx bx-badge-check", title: "Submission Brief", text: "We perform a detailed pre-submission run-through so you walk into your biometric slot with a 100% compliant documentation packet." }
+  ];
+
+  // Testimonials
+  const testimonialsList = page?.testimonials || defaultTestimonials;
+
+  // Form Section
+  const formTitle = page?.formTitle || 'Schedule Your Profile Analysis';
+  const formDesc = page?.formDesc || 'Fill out this form to connect with our senior travel access consultants. We will evaluate your profile and advise on VFS slot availability immediately.';
+  const formDisclaimer = page?.formDisclaimer || 'Please Note: We assist with tourist, business, and transit entry clearances only. We do not cater to labor, work permit, or employment requests.';
+  const packageName = page?.packageName || 'Schengen Tourist Appointment & Documentation';
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -76,13 +152,13 @@ export default function SchengenLanding({ content = {} }) {
   const formRef = useRef(null);
 
   useSEO({
-    title: 'Schengen Entry Clearance & Travel Access Consultants | Skyrush Tourism',
-    description: 'Expert Schengen travel permit consultancy for UAE residents. Professional assistance for VFS/TLS appointments, document preparation, hotel bookings, and travel insurance.',
+    title: seoTitle,
+    description: seoDescription,
     schema: {
       '@context': 'https://schema.org',
       '@type': 'Service',
-      'name': 'Schengen Entry Clearance Consulting',
-      'description': 'Professional document verification, appointment assistance, and travel permit consultancy for UAE residents visiting European Schengen countries.',
+      'name': seoTitle,
+      'description': seoDescription,
       'provider': {
         '@type': 'TravelAgency',
         'name': 'Skyrush Tourism',
@@ -95,6 +171,11 @@ export default function SchengenLanding({ content = {} }) {
       }
     }
   });
+
+  // If a custom URL slug is requested but doesn't exist in the database, redirect to home
+  if (landingSlug && !page) {
+    return <Navigate to="/" replace />;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -120,7 +201,7 @@ export default function SchengenLanding({ content = {} }) {
     const formElement = e.target;
     const data = new FormData(formElement);
     data.append('access_key', accessKey);
-    data.append('subject', `Schengen Entry Clearance Query: ${formData.name} (${formData.applicants} Applicants)`);
+    data.append('subject', `Lead Query from ${activeSlug} Landing Page: ${formData.name} (${formData.applicants} Applicants)`);
 
     try {
       const response = await fetch('https://api.web3forms.com/submit', {
@@ -132,7 +213,7 @@ export default function SchengenLanding({ content = {} }) {
 
       if (result.success) {
         setSubmitStatus('success');
-        setResponseMsg('Thank you! Our Schengen Travel Access team will contact you shortly to start your profile assessment.');
+        setResponseMsg('Thank you! Our Travel Access team will contact you shortly to start your profile assessment.');
         setFormData({
           name: '',
           email: '',
@@ -160,33 +241,22 @@ export default function SchengenLanding({ content = {} }) {
     }
   };
 
-  const formatPhoneNumber = (num) => {
-    return num.replace(/[^\d]/g, '');
-  };
-
-  const cleanPhone = formatPhoneNumber(contact.phoneCall || '+971567938033');
-  const cleanWhatsapp = formatPhoneNumber(contact.whatsapp || '+971567938033');
-
   return (
     <div className="schengen-landing-page">
       {/* Premium Hero Section */}
       <section className="schengen-hero">
         <div className="schengen-hero-overlay"></div>
         <div className="container schengen-hero-content">
-          <span className="schengen-hero-tagline">Premium Schengen Travel Advisory</span>
-          <h1 className="schengen-hero-title">
-            Unlock Seamless Entry To <span className="accent-text">29 European Countries</span>
-          </h1>
-          <p className="schengen-hero-subtitle">
-            Leading entry clearance & travel access consultants for UAE residents. We coordinate VFS/TLS appointments, compile 100% compliant documentation, flight reserves, hotel bookings, and required travel insurance.
-          </p>
+          <span className="schengen-hero-tagline">{heroTagline}</span>
+          <h1 className="schengen-hero-title" dangerouslySetInnerHTML={{ __html: heroTitle }} />
+          <p className="schengen-hero-subtitle" dangerouslySetInnerHTML={{ __html: heroSubtitle }} />
 
           <div className="schengen-hero-ctas">
             <button onClick={scrollToForm} className="schengen-btn-primary">
-              <i className="fa-solid fa-file-signature"></i> Free Assessment
+              <i className="fa-solid fa-file-signature"></i> {heroBtnText}
             </button>
             <a 
-              href={`https://api.whatsapp.com/send/?phone=${cleanWhatsapp}&text=Hello, I would like to consult regarding Schengen Entry Clearance.`}
+              href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
               className="schengen-btn-whatsapp"
@@ -204,15 +274,15 @@ export default function SchengenLanding({ content = {} }) {
           {/* Quick Trust Highlights */}
           <div className="schengen-hero-highlights">
             <div className="highlight-item">
-              <span className="highlight-val">98.8%</span>
+              <span className="highlight-val">{clearanceRate}</span>
               <span className="highlight-lbl">Clearance Rate</span>
             </div>
             <div className="highlight-item">
-              <span className="highlight-val">VFS & TLS</span>
+              <span className="highlight-val">{appointmentSupport}</span>
               <span className="highlight-lbl">Appointment Support</span>
             </div>
             <div className="highlight-item">
-              <span className="highlight-val">30K EUR</span>
+              <span className="highlight-val">{insuranceLimit}</span>
               <span className="highlight-lbl">Compliant Insurance Included</span>
             </div>
           </div>
@@ -223,44 +293,20 @@ export default function SchengenLanding({ content = {} }) {
       <section className="schengen-why-section">
         <div className="container">
           <div className="section-header text-center">
-            <h2>Why Consult With Us?</h2>
-            <p className="lead-text">
-              Navigating European travel requirements can be complicated. Our team ensures your files are perfect.
-            </p>
+            <h2>{whySectionTitle}</h2>
+            <p className="lead-text">{whySectionDesc}</p>
           </div>
 
           <div className="why-grid">
-            <div className="why-card">
-              <div className="why-icon-wrap">
-                <i className="fa-solid fa-calendar-check"></i>
+            {whyCards.map((card, idx) => (
+              <div className="why-card" key={idx}>
+                <div className="why-icon-wrap">
+                  <i className={card.icon || "fa-solid fa-star"}></i>
+                </div>
+                <h4>{card.title}</h4>
+                <p>{card.text}</p>
               </div>
-              <h4>VFS / TLS Booking Support</h4>
-              <p>We monitor and secure fast-track slots for biometrics and file submissions across European consulates.</p>
-            </div>
-
-            <div className="why-card">
-              <div className="why-icon-wrap">
-                <i className="fa-solid fa-folder-open"></i>
-              </div>
-              <h4>Compliant Documents</h4>
-              <p>We review your financial certificates, bank transcripts, and employer letters to verify they match consulate criteria.</p>
-            </div>
-
-            <div className="why-card">
-              <div className="why-icon-wrap">
-                <i className="fa-solid fa-map-location-dot"></i>
-              </div>
-              <h4>Itinerary Formats</h4>
-              <p>Get confirmed flight bookings, verifiable hotel vouchers, and detailed travel schedules that meet entry rules.</p>
-            </div>
-
-            <div className="why-card">
-              <div className="why-icon-wrap">
-                <i className="fa-solid fa-user-shield"></i>
-              </div>
-              <h4>Travel Insurance coordination</h4>
-              <p>All-inclusive Schengen approved coverage starting from €30,000 to keep you protected throughout your travel.</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -269,11 +315,9 @@ export default function SchengenLanding({ content = {} }) {
       <section className="schengen-horizontal-steps-section">
         <div className="container">
           <div className="section-header text-center">
-            <span className="eg-tag animate-tag">✨ APPLICATION STEPS</span>
-            <h2>Our Simplified Consulting Flow</h2>
-            <p className="lead-text">
-              We guide you step-by-step to compile the perfect travel permit application, secure slot booking, and ensure seamless European entry.
-            </p>
+            <span className="eg-tag animate-tag">{stepsSectionTag}</span>
+            <h2>{stepsSectionTitle}</h2>
+            <p className="lead-text">{stepsSectionDesc}</p>
           </div>
 
           <div className="horizontal-steps-wrapper">
@@ -281,68 +325,37 @@ export default function SchengenLanding({ content = {} }) {
             <div className="horizontal-steps-line"></div>
 
             <div className="horizontal-steps-grid">
-              {/* Step 1 */}
-              <div className="h-step-card">
-                <div className="h-step-badge">1</div>
-                <div className="h-step-icon-wrap">
-                  <i className="bx bx-search-alt"></i>
+              {steps.map((step, idx) => (
+                <div className="h-step-card" key={idx}>
+                  <div className="h-step-badge">{idx + 1}</div>
+                  <div className="h-step-icon-wrap">
+                    <i className={step.icon || "bx bx-check"}></i>
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
                 </div>
-                <h3>Profile Assessment</h3>
-                <p>We review your residency status, passport validity, and bank statement health to identify the best European consulate for your entry.</p>
-              </div>
-
-              {/* Step 2 */}
-              <div className="h-step-card">
-                <div className="h-step-badge">2</div>
-                <div className="h-step-icon-wrap">
-                  <i className="bx bx-file"></i>
-                </div>
-                <h3>Document Prep</h3>
-                <p>We compile your cover letter, flight reservations, verified hotel vouchers, and Schengen-compliant travel insurance policy.</p>
-              </div>
-
-              {/* Step 3 */}
-              <div className="h-step-card">
-                <div className="h-step-badge">3</div>
-                <div className="h-step-icon-wrap">
-                  <i className="bx bx-calendar"></i>
-                </div>
-                <h3>Appointment Booking</h3>
-                <p>We monitor slot availability daily and secure your biometric appointment at the corresponding VFS Global or TLS Contact center.</p>
-              </div>
-
-              {/* Step 4 */}
-              <div className="h-step-card">
-                <div className="h-step-badge">4</div>
-                <div className="h-step-icon-wrap">
-                  <i className="bx bx-badge-check"></i>
-                </div>
-                <h3>Submission Brief</h3>
-                <p>We perform a detailed pre-submission run-through so you walk into your biometric slot with a 100% compliant documentation packet.</p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Schengen-specific Testimonials Section */}
-      <Testimonials testimonials={schengenTestimonials} visaEnabled={false} />
+      {/* Testimonials Section */}
+      <Testimonials testimonials={testimonialsList} visaEnabled={false} />
 
       {/* Lead Capture Web Form Section */}
       <section className="schengen-form-section" id="consultation-form-section">
         <div className="container form-section-grid">
           <div className="form-info-side">
-            <h2>Schedule Your Profile Analysis</h2>
-            <p className="lead-text">
-              Fill out this form to connect with our senior travel access consultants. We will evaluate your profile and advise on VFS slot availability immediately.
-            </p>
+            <h2>{formTitle}</h2>
+            <p className="lead-text">{formDesc}</p>
 
             <div className="contact-methods">
               <div className="method-item">
                 <div className="method-icon"><i className="fa-solid fa-phone"></i></div>
                 <div>
                   <span>Direct Hotline</span>
-                  <a href={`tel:${cleanPhone}`}>{contact.phone || '+971 56 793 8033'}</a>
+                  <a href={`tel:${cleanPhone}`}>{displayPhone}</a>
                 </div>
               </div>
 
@@ -351,7 +364,7 @@ export default function SchengenLanding({ content = {} }) {
                 <div>
                   <span>Consult via WhatsApp</span>
                   <a 
-                    href={`https://api.whatsapp.com/send/?phone=${cleanWhatsapp}&text=Hello, I would like to consult regarding Schengen Entry Clearance.`}
+                    href={whatsappLink}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -373,7 +386,7 @@ export default function SchengenLanding({ content = {} }) {
           <div className="form-card-side">
             <h3>Request Callback</h3>
             <p className="form-disclaimer-text" style={{ fontSize: '12px', color: '#64748b', marginTop: '-15px', marginBottom: '20px', lineHeight: '1.4' }}>
-              <strong>Please Note:</strong> We assist with tourist, business, and transit entry clearances only. We do not cater to labor, work permit, or employment requests.
+              <strong>Please Note:</strong> {formDisclaimer}
             </p>
             
             {submitStatus === 'success' && (
@@ -397,7 +410,7 @@ export default function SchengenLanding({ content = {} }) {
                 <label>Selected Package</label>
                 <input 
                   type="text" 
-                  value="Schengen Tourist Appointment & Documentation" 
+                  value={packageName} 
                   readOnly 
                   className="read-only-input"
                   name="selected_package"
@@ -492,7 +505,7 @@ export default function SchengenLanding({ content = {} }) {
       {/* Floating CTA bar for mobile screens */}
       <div className="schengen-floating-cta-bar">
         <a 
-          href={`https://api.whatsapp.com/send/?phone=${cleanWhatsapp}&text=Hello, I would like to consult regarding Schengen Entry Clearance.`}
+          href={whatsappLink}
           target="_blank"
           rel="noopener noreferrer"
           className="floating-btn whatsapp"

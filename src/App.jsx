@@ -90,6 +90,45 @@ export default function App() {
     fetchContent();
   }, []);
 
+  // Inject / sync tracking snippets into DOM whenever content changes
+  useEffect(() => {
+    const snippets = (content.trackingSnippets || []).filter(s => s.enabled && s.code?.trim());
+
+    // Remove all previously injected snippets
+    document.querySelectorAll('[data-skyrush-snippet]').forEach(el => el.remove());
+
+    snippets.forEach(snip => {
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = snip.code;
+      const nodes = Array.from(wrapper.childNodes);
+
+      nodes.forEach(node => {
+        const cloned = node.cloneNode(true);
+        // Re-execute script tags (innerHTML clone doesn't run scripts)
+        let el = cloned;
+        if (cloned.nodeName === 'SCRIPT') {
+          el = document.createElement('script');
+          if (cloned.src) el.src = cloned.src;
+          if (cloned.async) el.async = true;
+          if (cloned.defer) el.defer = true;
+          el.textContent = cloned.textContent;
+          Array.from(cloned.attributes).forEach(attr => {
+            if (!['src','async','defer'].includes(attr.name)) el.setAttribute(attr.name, attr.value);
+          });
+        }
+        el.setAttribute('data-skyrush-snippet', snip.id);
+
+        if (snip.location === 'head') {
+          document.head.appendChild(el);
+        } else if (snip.location === 'body_start') {
+          document.body.insertBefore(el, document.body.firstChild);
+        } else {
+          document.body.appendChild(el);
+        }
+      });
+    });
+  }, [content.trackingSnippets]);
+
   // Fetch exchange rates from Frankfurter API and cache for 12 hours
   useEffect(() => {
     const fetchRates = async () => {
@@ -230,6 +269,9 @@ export default function App() {
             />
             {/* Redirect old path /admin to secure path /admin-portal */}
             <Route path="/admin" element={<Navigate to="/admin-portal" replace />} />
+            
+            {/* Custom Admin-Formulated Landing Pages */}
+            <Route path="/:landingSlug" element={<SchengenLanding content={content} />} />
           </Routes>
         </main>
         

@@ -34,6 +34,7 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
   const [expandedTours, setExpandedTours] = useState({});
   const [expandedVisas, setExpandedVisas] = useState({});
   const [expandedBlogs, setExpandedBlogs] = useState({});
+  const [expandedLandingPages, setExpandedLandingPages] = useState({});
   const [tourSearchQuery, setTourSearchQuery] = useState('');
   const [isWeb3FormsUnlocked, setIsWeb3FormsUnlocked] = useState(false);
   const [expandedSliders, setExpandedSliders] = useState({});
@@ -189,6 +190,9 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
   useEffect(() => {
     if (content && Object.keys(content).length > 0) {
       const copy = JSON.parse(JSON.stringify(content)); // Deep copy
+      if (!copy.landingPages) {
+        copy.landingPages = [];
+      }
       if (copy.tours && Array.isArray(copy.tours)) {
         const usedCodes = new Set(copy.tours.map(t => t.packageCode).filter(Boolean));
         copy.tours = copy.tours.map(t => {
@@ -631,10 +635,172 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
     });
   };
 
+  const toggleLandingPageExpand = (id) => {
+    setExpandedLandingPages(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  const addLandingPage = () => {
+    const nextId = localContent.landingPages && localContent.landingPages.length > 0 
+      ? Math.max(...localContent.landingPages.map(p => {
+          const idNum = parseInt(p.id, 10);
+          return isNaN(idNum) ? 0 : idNum;
+        })) + 1 
+      : 1;
+      
+    const newPage = {
+      id: String(nextId),
+      slug: `new-landing-${nextId}`,
+      seoTitle: "Visa & Entry Clearance Consultants | Skyrush Tourism",
+      seoDescription: "Professional document verification and appointment booking support for entry visa clearance.",
+      heroTagline: "Premium Travel Advisory",
+      heroTitle: "Unlock Seamless Entry To <span class=\"accent-text\">Your Destination</span>",
+      heroSubtitle: "Expert visa documentation, flight reservations, hotel vouchers, and compliant travel insurance compiled by leading travel consultants.",
+      heroBtnText: "Free Assessment",
+      whatsappNumber: localContent.contact?.whatsapp || "+971567938033",
+      whatsappMessage: "Hello, I would like to consult regarding my visa entry clearance.",
+      phoneNumber: localContent.contact?.phoneCall || "+971567938033",
+      clearanceRate: "99%",
+      appointmentSupport: "VFS & TLS",
+      insuranceLimit: "30K EUR",
+      whySectionTitle: "Why Consult With Us?",
+      whySectionDesc: "We take the complexity out of travel documentation and consulates filing requirements.",
+      whyCards: [
+        {
+          icon: "fa-solid fa-calendar-check",
+          title: "Consulate Slots Booking",
+          text: "We track and book the earliest biometric and file submission slots."
+        },
+        {
+          icon: "fa-solid fa-folder-open",
+          title: "Document Verification",
+          text: "We crosscheck financial proofs, employment certificates, and bank transcripts."
+        },
+        {
+          icon: "fa-solid fa-map-location-dot",
+          title: "Itinerary Formats",
+          text: "Fully verifiable and compliant flight bookings, hotel reservations, and daily plan outlines."
+        },
+        {
+          icon: "fa-solid fa-user-shield",
+          title: "Approved Travel Insurance",
+          text: "We arrange consulate-certified emergency medical and repatriation travel insurance policy."
+        }
+      ],
+      stepsSectionTag: "✨ SIMPLIFIED STEPS",
+      stepsSectionTitle: "Our Consultation Checklist",
+      stepsSectionDesc: "Simple steps to build a 100% consulate-compliant profile.",
+      steps: [
+        { id: 1, icon: "bx bx-search-alt", title: "Profile Evaluation", text: "We review your residency status, travel history, and income details." },
+        { id: 2, icon: "bx bx-file", title: "File Preparation", text: "We draft cover letters, reserves, insurance, and application forms." },
+        { id: 3, icon: "bx bx-calendar", title: "Biometrics Appointment", text: "We book your appointment at the consular center." },
+        { id: 4, icon: "bx bx-badge-check", title: "Final Briefing", text: "We prepare you for the interview and checklist submission." }
+      ],
+      testimonials: [
+        {
+          id: 1,
+          category: "Google",
+          quote: "Remarkable service. They handled my document checklists and appointment slots perfectly. Got my approval in a week.",
+          author: "Sanjay Kumar",
+          location: "Dubai",
+          avatar: "https://i.pravatar.cc/80?img=11",
+          meta: "Just now"
+        }
+      ],
+      formTitle: "Schedule Your Profile Evaluation",
+      formDesc: "Let our specialists inspect your financial and residency profiles. We will assist you with slot booking availability immediately.",
+      formDisclaimer: "We assist with tourist, business, and transit clearances. We do not process employment or labor contracts.",
+      packageName: "Tourist Visa Appointment & Documentation Assistance"
+    };
+
+    setExpandedLandingPages(prev => ({ ...prev, [newPage.id]: true }));
+    setLocalContent(prev => ({
+      ...prev,
+      landingPages: [...(prev.landingPages || []), newPage]
+    }));
+  };
+
+  const updateLandingPage = (id, field, val) => {
+    setLocalContent(prev => {
+      const copy = { ...prev };
+      copy.landingPages = (copy.landingPages || []).map(p => 
+        p.id === id ? { ...p, [field]: val } : p
+      );
+      return copy;
+    });
+  };
+
+  const deleteLandingPage = (id) => {
+    const page = (localContent.landingPages || []).find(p => p.id === id);
+    if (page && page.slug === 'schengen') {
+      alert('The default "/schengen" landing page is protected and cannot be deleted, but it can be fully customized.');
+      return;
+    }
+    if (window.confirm(`Are you sure you want to delete the landing page with slug "${page?.slug || id}"?`)) {
+      setLocalContent(prev => {
+        const copy = { ...prev };
+        copy.landingPages = (copy.landingPages || []).filter(p => p.id !== id);
+        return copy;
+      });
+    }
+  };
+
+  const updateLandingPageCard = (pageId, section, cardIdx, field, val) => {
+    setLocalContent(prev => {
+      const copy = { ...prev };
+      copy.landingPages = (copy.landingPages || []).map(p => {
+        if (p.id !== pageId) return p;
+        const sectionList = [...(p[section] || [])];
+        sectionList[cardIdx] = { ...sectionList[cardIdx], [field]: val };
+        return { ...p, [section]: sectionList };
+      });
+      return copy;
+    });
+  };
+   
+  const addLandingPageCard = (pageId, section, defaultItem) => {
+    setLocalContent(prev => {
+      const copy = { ...prev };
+      copy.landingPages = (copy.landingPages || []).map(p => {
+        if (p.id !== pageId) return p;
+        const sectionList = [...(p[section] || [])];
+        sectionList.push(defaultItem);
+        return { ...p, [section]: sectionList };
+      });
+      return copy;
+    });
+  };
+
+  const removeLandingPageCard = (pageId, section, cardIdx) => {
+    setLocalContent(prev => {
+      const copy = { ...prev };
+      copy.landingPages = (copy.landingPages || []).map(p => {
+        if (p.id !== pageId) return p;
+        const sectionList = [...(p[section] || [])];
+        sectionList.splice(cardIdx, 1);
+        return { ...p, [section]: sectionList };
+      });
+      return copy;
+    });
+  };
+
 
 
   // Save edits back to backend server
   const handleSave = async () => {
+    // Validate landing pages
+    const invalidLanding = (localContent.landingPages || []).some(p => 
+      !p.slug || !p.slug.trim() || 
+      !p.seoTitle || !p.seoTitle.trim() || 
+      !p.seoDescription || !p.seoDescription.trim()
+    );
+    if (invalidLanding) {
+      alert('Error: URL Slug, SEO Title, and SEO Description are compulsory for all Custom Landing Pages.');
+      return;
+    }
+
     // Validate compulsory regular price
     const missingTourPrice = (localContent.tours || []).some(t => !t.price || !t.price.trim());
     const missingVisaPrice = (localContent.visas || []).some(v => !v.price || !v.price.trim());
@@ -754,6 +920,22 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
             onClick={() => setActiveSection('users')}
           >
             <i className="bx bx-group"></i> User Management
+          </button>
+        )}
+        {userRole === 'super_admin' && (
+          <button 
+            className={`admin-nav-item ${activeSection === 'tracking' ? 'active' : ''}`}
+            onClick={() => setActiveSection('tracking')}
+          >
+            <i className="bx bx-code-curly"></i> Tracking & Analytics
+          </button>
+        )}
+        {userRole !== 'blogger' && (
+          <button 
+            className={`admin-nav-item ${activeSection === 'landingPages' ? 'active' : ''}`}
+            onClick={() => setActiveSection('landingPages')}
+          >
+            <i className="bx bx-layout"></i> Landing Pages
           </button>
         )}
         <button 
@@ -2917,6 +3099,802 @@ export default function AdminDashboard({ content = {}, onSaveContent, onLogout, 
             </div>
           </section>
         )}
+
+        {/* LANDING PAGES MANAGEMENT SECTION */}
+        {activeSection === 'landingPages' && (() => {
+          const pages = localContent.landingPages || [];
+
+          return (
+            <section>
+              <div className="admin-card">
+                <div className="admin-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h3 style={{ margin: 0 }}><i className="bx bx-layout" style={{ marginRight: '8px', color: '#f97316' }}></i>Custom Landing Pages</h3>
+                    <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#64748b' }}>Create, edit, or delete custom travel access and visa entry clearance landing pages dynamically.</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addLandingPage}
+                    className="add-btn"
+                  >
+                    <i className="bx bx-plus" style={{ marginRight: '4px' }}></i> Create Landing Page
+                  </button>
+                </div>
+
+                {pages.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '40px 20px', background: '#f8fafc', borderRadius: '12px', border: '2px dashed #e2e8f0' }}>
+                    <i className="bx bx-layout" style={{ fontSize: '36px', color: '#cbd5e1', display: 'block', marginBottom: '10px' }}></i>
+                    <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0 }}>No custom landing pages found. Click the button above to create one.</p>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {pages.map((p, pIdx) => {
+                      const isExpanded = expandedLandingPages[p.id];
+                      return (
+                        <div
+                          key={p.id}
+                          style={{
+                            border: '2px solid #e2e8f0',
+                            borderRadius: '12px',
+                            background: '#ffffff',
+                            overflow: 'hidden'
+                          }}
+                        >
+                          {/* Accordion Header */}
+                          <div
+                            style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '15px 20px', borderBottom: isExpanded ? '1px solid #f1f5f9' : 'none', cursor: 'pointer', background: '#f8fafc' }}
+                            onClick={() => toggleLandingPageExpand(p.id)}
+                          >
+                            <i className="bx bx-window-alt" style={{ fontSize: '20px', color: '#f97316' }}></i>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontWeight: 700, fontSize: '15px', color: '#0f172a' }}>
+                                {p.seoTitle || 'Untitled Landing Page'}
+                              </div>
+                              <div style={{ fontSize: '12px', color: '#64748b', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <span style={{ background: '#e2e8f0', padding: '2px 8px', borderRadius: '4px', fontFamily: 'monospace', fontWeight: 600 }}>/{p.slug}</span>
+                                <span>•</span>
+                                <a href={`/${p.slug}`} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ color: '#f97316', textDecoration: 'underline' }}>View Live Page <i className="bx bx-link-external" style={{ fontSize: '10px' }}></i></a>
+                              </div>
+                            </div>
+                            
+                            {/* Expand/Collapse Trigger */}
+                            <button
+                              type="button"
+                              className="expand-arrow-btn"
+                              style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '5px' }}
+                            >
+                              <i className={`bx bx-chevron-${isExpanded ? 'up' : 'down'}`} style={{ fontSize: '22px', color: '#94a3b8' }}></i>
+                            </button>
+
+                            {/* Delete Button */}
+                            <button
+                              type="button"
+                              onClick={e => { e.stopPropagation(); deleteLandingPage(p.id); }}
+                              className="delete-card-btn"
+                              style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '5px' }}
+                              title="Delete Landing Page"
+                            >
+                              <i className="bx bx-trash" style={{ fontSize: '18px' }}></i>
+                            </button>
+                          </div>
+
+                          {/* Accordion Body */}
+                          {isExpanded && (
+                            <div style={{ padding: '20px' }}>
+                              {/* 1. Page Settings & URL */}
+                              <h4 style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <i className="bx bx-cog" style={{ color: '#64748b' }}></i> General Page Settings
+                              </h4>
+                              
+                              <div className="admin-grid-2">
+                                <div className="admin-input-group">
+                                  <label>URL Slug <span style={{ color: '#ef4444' }}>*</span></label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. italy-schengen (results in /italy-schengen)"
+                                    value={p.slug || ''}
+                                    onChange={e => {
+                                      const val = e.target.value.toLowerCase().replace(/[^a-z0-9-_]/g, '');
+                                      updateLandingPage(p.id, 'slug', val);
+                                    }}
+                                    disabled={p.slug === 'schengen'}
+                                  />
+                                  {p.slug === 'schengen' && (
+                                    <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#94a3b8' }}>The primary /schengen URL is locked, but its content can be fully edited below.</p>
+                                  )}
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Package Selected Name (Lead Form Read-only Field)</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. Schengen Tourist Appointment & Documentation"
+                                    value={p.packageName || ''}
+                                    onChange={e => updateLandingPage(p.id, 'packageName', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="admin-grid-2">
+                                <div className="admin-input-group">
+                                  <label>SEO Title <span style={{ color: '#ef4444' }}>*</span></label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="Enter search engine title tag..."
+                                    value={p.seoTitle || ''}
+                                    onChange={e => updateLandingPage(p.id, 'seoTitle', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>SEO Description <span style={{ color: '#ef4444' }}>*</span></label>
+                                  <textarea
+                                    rows="2"
+                                    className="admin-input"
+                                    placeholder="Enter search engine description snippet..."
+                                    value={p.seoDescription || ''}
+                                    onChange={e => updateLandingPage(p.id, 'seoDescription', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              {/* 2. Hero Section Settings */}
+                              <h4 style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <i className="bx bx-star" style={{ color: '#64748b' }}></i> Hero Section Content
+                              </h4>
+                              
+                              <div className="admin-grid-2">
+                                <div className="admin-input-group">
+                                  <label>Hero Tagline</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. Premium Schengen Travel Advisory"
+                                    value={p.heroTagline || ''}
+                                    onChange={e => updateLandingPage(p.id, 'heroTagline', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Hero CTA Button Text</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. Free Assessment"
+                                    value={p.heroBtnText || ''}
+                                    onChange={e => updateLandingPage(p.id, 'heroBtnText', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="admin-input-group">
+                                <label>Hero Title (Allows HTML like &lt;span class="accent-text"&gt;text&lt;/span&gt;)</label>
+                                <input
+                                  type="text"
+                                  className="admin-input"
+                                  placeholder="e.g. Unlock Seamless Entry To <span class='accent-text'>29 European Countries</span>"
+                                  value={p.heroTitle || ''}
+                                  onChange={e => updateLandingPage(p.id, 'heroTitle', e.target.value)}
+                                />
+                              </div>
+
+                              <div className="admin-input-group">
+                                <label>Hero Subtitle / Description Paragraph</label>
+                                <textarea
+                                  rows="3"
+                                  className="admin-input"
+                                  placeholder="Enter detailed description supporting the hero title..."
+                                  value={p.heroSubtitle || ''}
+                                  onChange={e => updateLandingPage(p.id, 'heroSubtitle', e.target.value)}
+                                />
+                              </div>
+
+                              {/* 3. Contact & WhatsApp Preset Configuration */}
+                              <h4 style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <i className="bx bxl-whatsapp" style={{ color: '#25d366' }}></i> Contact &amp; WhatsApp Settings
+                              </h4>
+                              
+                              <div className="admin-grid-3">
+                                <div className="admin-input-group">
+                                  <label>WhatsApp Number</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. +971567938033"
+                                    value={p.whatsappNumber || ''}
+                                    onChange={e => updateLandingPage(p.id, 'whatsappNumber', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Hotline Phone Number (Display &amp; Call)</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. +971 56 793 8033"
+                                    value={p.phoneNumber || ''}
+                                    onChange={e => updateLandingPage(p.id, 'phoneNumber', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Trust Banner: Clearance Rate</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. 98.8%"
+                                    value={p.clearanceRate || ''}
+                                    onChange={e => updateLandingPage(p.id, 'clearanceRate', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="admin-grid-3">
+                                <div className="admin-input-group">
+                                  <label>Trust Banner: Slots Support</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. VFS & TLS"
+                                    value={p.appointmentSupport || ''}
+                                    onChange={e => updateLandingPage(p.id, 'appointmentSupport', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Trust Banner: Insurance Info</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. 30K EUR"
+                                    value={p.insuranceLimit || ''}
+                                    onChange={e => updateLandingPage(p.id, 'insuranceLimit', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="admin-input-group">
+                                <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                  <span>WhatsApp Message Preset</span>
+                                  <span style={{ fontSize: '11px', color: '#64748b' }}>This text is auto-filled when visitors click WhatsApp CTA.</span>
+                                </label>
+                                <textarea
+                                  rows="2"
+                                  className="admin-input"
+                                  placeholder="e.g. Hello, I would like to consult regarding Schengen Entry Clearance."
+                                  value={p.whatsappMessage || ''}
+                                  onChange={e => updateLandingPage(p.id, 'whatsappMessage', e.target.value)}
+                                />
+                              </div>
+
+                              {/* 4. Why Choose Us Section */}
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px' }}>
+                                <h4 style={{ margin: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <i className="bx bx-check-shield" style={{ color: '#64748b' }}></i> Why Choose Us - Service Value Cards
+                                </h4>
+                                <button
+                                  type="button"
+                                  onClick={() => addLandingPageCard(p.id, 'whyCards', { icon: 'fa-solid fa-star', title: 'New Advantage', text: 'Detail of this travel service benefit.' })}
+                                  className="add-btn"
+                                  style={{ padding: '4px 10px', fontSize: '11px' }}
+                                >
+                                  <i className="bx bx-plus"></i> Add Card
+                                </button>
+                              </div>
+
+                              <div className="admin-grid-2">
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label>Why Section Title</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    value={p.whySectionTitle || ''}
+                                    onChange={e => updateLandingPage(p.id, 'whySectionTitle', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label>Why Section Description</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    value={p.whySectionDesc || ''}
+                                    onChange={e => updateLandingPage(p.id, 'whySectionDesc', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '15px' }}>
+                                {(p.whyCards || []).map((card, cIdx) => (
+                                  <div key={cIdx} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', background: '#f8fafc', position: 'relative' }}>
+                                    <span style={{ position: 'absolute', top: '10px', right: '10px', color: '#ef4444', cursor: 'pointer', fontWeight: 700 }} onClick={() => removeLandingPageCard(p.id, 'whyCards', cIdx)}>
+                                      <i className="bx bx-x" style={{ fontSize: '18px' }}></i>
+                                    </span>
+                                    <div className="admin-grid-2" style={{ gap: '10px' }}>
+                                      <div className="admin-input-group" style={{ marginBottom: '8px' }}>
+                                        <label style={{ fontSize: '10px' }}>FontAwesome Icon</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          placeholder="e.g. fa-solid fa-calendar-check"
+                                          value={card.icon || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'whyCards', cIdx, 'icon', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="admin-input-group" style={{ marginBottom: '8px' }}>
+                                        <label style={{ fontSize: '10px' }}>Card Title</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={card.title || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'whyCards', cIdx, 'title', e.target.value)}
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                      <label style={{ fontSize: '10px' }}>Explanation Paragraph</label>
+                                      <textarea
+                                        rows="2"
+                                        className="admin-input"
+                                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                                        value={card.text || ''}
+                                        onChange={e => updateLandingPageCard(p.id, 'whyCards', cIdx, 'text', e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* 5. Consulting Flow Steps */}
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px' }}>
+                                <h4 style={{ margin: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <i className="bx bx-list-check" style={{ color: '#64748b' }}></i> Simplified Consulting Flow Steps
+                                </h4>
+                                <button
+                                  type="button"
+                                  onClick={() => addLandingPageCard(p.id, 'steps', { id: (p.steps?.length || 0) + 1, icon: 'bx bx-check', title: 'New Step', text: 'Detail of this consultation phase.' })}
+                                  className="add-btn"
+                                  style={{ padding: '4px 10px', fontSize: '11px' }}
+                                >
+                                  <i className="bx bx-plus"></i> Add Step
+                                </button>
+                              </div>
+
+                              <div className="admin-grid-3">
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label>Steps Tagline Badge</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    value={p.stepsSectionTag || ''}
+                                    onChange={e => updateLandingPage(p.id, 'stepsSectionTag', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label>Steps Header Title</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    value={p.stepsSectionTitle || ''}
+                                    onChange={e => updateLandingPage(p.id, 'stepsSectionTitle', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label>Steps Header Subtitle</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    value={p.stepsSectionDesc || ''}
+                                    onChange={e => updateLandingPage(p.id, 'stepsSectionDesc', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '15px' }}>
+                                {(p.steps || []).map((step, sIdx) => (
+                                  <div key={sIdx} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', background: '#f8fafc', position: 'relative' }}>
+                                    <span style={{ position: 'absolute', top: '10px', right: '10px', color: '#ef4444', cursor: 'pointer', fontWeight: 700 }} onClick={() => removeLandingPageCard(p.id, 'steps', sIdx)}>
+                                      <i className="bx bx-x" style={{ fontSize: '18px' }}></i>
+                                    </span>
+                                    <div className="admin-grid-2" style={{ gap: '10px' }}>
+                                      <div className="admin-input-group" style={{ marginBottom: '8px' }}>
+                                        <label style={{ fontSize: '10px' }}>BoxIcons Icon Code</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          placeholder="e.g. bx bx-search-alt"
+                                          value={step.icon || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'steps', sIdx, 'icon', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="admin-input-group" style={{ marginBottom: '8px' }}>
+                                        <label style={{ fontSize: '10px' }}>Step Title</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={step.title || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'steps', sIdx, 'title', e.target.value)}
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                      <label style={{ fontSize: '10px' }}>Description Paragraph</label>
+                                      <textarea
+                                        rows="2"
+                                        className="admin-input"
+                                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                                        value={step.text || ''}
+                                        onChange={e => updateLandingPageCard(p.id, 'steps', sIdx, 'text', e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+
+                              {/* 6. Form Details Configuration */}
+                              <h4 style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px', color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                <i className="bx bx-spreadsheet" style={{ color: '#64748b' }}></i> Callback Request Form Settings
+                              </h4>
+                              
+                              <div className="admin-grid-2">
+                                <div className="admin-input-group">
+                                  <label>Form Area Title</label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. Schedule Your Profile Analysis"
+                                    value={p.formTitle || ''}
+                                    onChange={e => updateLandingPage(p.id, 'formTitle', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group">
+                                  <label>Form Area Subtitle Description</label>
+                                  <textarea
+                                    rows="2"
+                                    className="admin-input"
+                                    placeholder="Provide guidelines for users on slot availability..."
+                                    value={p.formDesc || ''}
+                                    onChange={e => updateLandingPage(p.id, 'formDesc', e.target.value)}
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="admin-input-group">
+                                <label>Form Disclaimer Alert Text (Red/Amber warnings)</label>
+                                <textarea
+                                  rows="2"
+                                  className="admin-input"
+                                  placeholder="e.g. Please Note: We assist with tourist, business and transit entry clearances only..."
+                                  value={p.formDisclaimer || ''}
+                                  onChange={e => updateLandingPage(p.id, 'formDisclaimer', e.target.value)}
+                                />
+                              </div>
+
+                              {/* 7. Custom Testimonials Editor */}
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px', marginBottom: '15px', marginTop: '25px' }}>
+                                <h4 style={{ margin: 0, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                  <i className="bx bx-message-square-detail" style={{ color: '#64748b' }}></i> Custom Page Testimonials
+                                </h4>
+                                <button
+                                  type="button"
+                                  onClick={() => addLandingPageCard(p.id, 'testimonials', { id: Date.now(), category: 'Google', quote: 'Excellent consultancy.', author: 'Customer Name', location: 'UAE', avatar: 'https://i.pravatar.cc/80?img=60', meta: 'Just now' })}
+                                  className="add-btn"
+                                  style={{ padding: '4px 10px', fontSize: '11px' }}
+                                >
+                                  <i className="bx bx-plus"></i> Add Testimonial
+                                </button>
+                              </div>
+
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                                {(p.testimonials || []).map((t, tIdx) => (
+                                  <div key={t.id || tIdx} style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '12px', background: '#f8fafc', position: 'relative' }}>
+                                    <span style={{ position: 'absolute', top: '10px', right: '10px', color: '#ef4444', cursor: 'pointer', fontWeight: 700 }} onClick={() => removeLandingPageCard(p.id, 'testimonials', tIdx)}>
+                                      <i className="bx bx-x" style={{ fontSize: '18px' }}></i>
+                                    </span>
+                                    <div className="admin-grid-3" style={{ gap: '10px', marginBottom: '8px' }}>
+                                      <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                        <label style={{ fontSize: '10px' }}>Author Name</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={t.author || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'author', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                        <label style={{ fontSize: '10px' }}>Origin/Country</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={t.location || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'location', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                        <label style={{ fontSize: '10px' }}>Platform (Google/Facebook/etc)</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={t.category || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'category', e.target.value)}
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="admin-grid-2" style={{ gap: '10px', marginBottom: '8px' }}>
+                                      <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                        <label style={{ fontSize: '10px' }}>Avatar Image URL</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={t.avatar || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'avatar', e.target.value)}
+                                        />
+                                      </div>
+                                      <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                        <label style={{ fontSize: '10px' }}>Metadata Subtext (e.g. Date)</label>
+                                        <input
+                                          type="text"
+                                          className="admin-input"
+                                          style={{ padding: '4px 8px', fontSize: '12px' }}
+                                          value={t.meta || ''}
+                                          onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'meta', e.target.value)}
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                      <label style={{ fontSize: '10px' }}>Review Quote / Experience</label>
+                                      <textarea
+                                        rows="2"
+                                        className="admin-input"
+                                        style={{ padding: '4px 8px', fontSize: '12px' }}
+                                        value={t.quote || ''}
+                                        onChange={e => updateLandingPageCard(p.id, 'testimonials', tIdx, 'quote', e.target.value)}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div style={{ marginTop: '16px', padding: '12px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', fontSize: '12px', color: '#92400e' }}>
+                  <strong>💾 Remember to click "Save All Changes"</strong> after managing your landing pages — new pages and changes are written to the database on save.
+                </div>
+              </div>
+            </section>
+          );
+        })()}
+
+        {/* TRACKING & CODE SNIPPETS SECTION */}
+        {activeSection === 'tracking' && (() => {
+          const snippets = localContent.trackingSnippets || [];
+
+          const PLATFORM_PRESETS = [
+            { id: 'ga4', label: 'Google Analytics 4', color: '#e37400', icon: 'bxl-google', placeholder: `<!-- Google Analytics (GA4) -->\n<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>\n<script>\n  window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n  gtag('js', new Date());\n  gtag('config', 'G-XXXXXXXXXX');\n</script>`, location: 'head' },
+            { id: 'gtm_head', label: 'Google Tag Manager (Head)', color: '#4285f4', icon: 'bxl-google', placeholder: `<!-- Google Tag Manager -->\n<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-XXXXXXX');\n</script>\n<!-- End Google Tag Manager -->`, location: 'head' },
+            { id: 'gtm_body', label: 'Google Tag Manager (Body)', color: '#34a853', icon: 'bxl-google', placeholder: `<!-- Google Tag Manager (noscript) -->\n<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>\n<!-- End Google Tag Manager (noscript) -->`, location: 'body_start' },
+            { id: 'meta', label: 'Meta Pixel (Facebook)', color: '#1877f2', icon: 'bxl-facebook-square', placeholder: `<!-- Meta Pixel Code -->\n<script>\n!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');\nfbq('init', 'YOUR_PIXEL_ID');\nfbq('track', 'PageView');\n</script>\n<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/></noscript>\n<!-- End Meta Pixel Code -->`, location: 'head' },
+            { id: 'tiktok', label: 'TikTok Pixel', color: '#000000', icon: 'bx-music', placeholder: `<!-- TikTok Pixel -->\n<script>\n!function (w, d, t) {w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};\nttq.load('YOUR_PIXEL_ID');\nttq.page();\n}(window, document, 'ttq');\n</script>`, location: 'head' },
+            { id: 'linkedin', label: 'LinkedIn Insight', color: '#0a66c2', icon: 'bxl-linkedin-square', placeholder: `<!-- LinkedIn Insight Tag -->\n<script type="text/javascript">\n_linkedin_partner_id = "YOUR_PARTNER_ID";\nwindow._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];\nwindow._linkedin_data_partner_ids.push(_linkedin_partner_id);\n(function(l) { if (!l){window.lintrk = function(a,b){window.lintrk.q.push([a,b])};window.lintrk.q=[]} var s = document.getElementsByTagName("script")[0]; var b = document.createElement("script"); b.type = "text/javascript";b.async = true; b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js"; s.parentNode.insertBefore(b, s);})(window.lintrk);\n</script>\n<noscript><img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=YOUR_PARTNER_ID&fmt=gif" /></noscript>`, location: 'head' },
+            { id: 'custom_head', label: 'Custom Head Script', color: '#7c3aed', icon: 'bx-code-alt', placeholder: `<!-- Paste your custom <script> or <meta> tag here -->`, location: 'head' },
+            { id: 'custom_footer', label: 'Custom Footer Script', color: '#0891b2', icon: 'bx-code-alt', placeholder: `<!-- Paste your custom footer script here -->`, location: 'body_end' },
+          ];
+
+          const addSnippet = (preset) => {
+            setLocalContent(prev => {
+              const copy = { ...prev };
+              const list = copy.trackingSnippets ? [...copy.trackingSnippets] : [];
+              list.push({
+                id: Date.now().toString(),
+                title: preset ? preset.label : 'New Snippet',
+                platform: preset ? preset.id : 'custom',
+                code: preset ? preset.placeholder : '',
+                location: preset ? preset.location : 'head',
+                enabled: true,
+                expanded: true
+              });
+              copy.trackingSnippets = list;
+              return copy;
+            });
+          };
+
+          const removeSnippet = (sid) => {
+            if (!window.confirm('Remove this tracking snippet?')) return;
+            setLocalContent(prev => {
+              const copy = { ...prev };
+              copy.trackingSnippets = (copy.trackingSnippets || []).filter(s => s.id !== sid);
+              return copy;
+            });
+          };
+
+          const updateSnippet = (sid, field, val) => {
+            setLocalContent(prev => {
+              const copy = { ...prev };
+              copy.trackingSnippets = (copy.trackingSnippets || []).map(s => s.id === sid ? { ...s, [field]: val } : s);
+              return copy;
+            });
+          };
+
+          const LOCATION_LABELS = {
+            head: { label: '⟨head⟩', desc: 'Injected in page <head>', color: '#7c3aed', bg: '#f5f3ff' },
+            body_start: { label: '⟨body⟩ start', desc: 'After <body> opens', color: '#0891b2', bg: '#ecfeff' },
+            body_end: { label: '⟨/body⟩ end', desc: 'Before </body> closes', color: '#16a34a', bg: '#f0fdf4' }
+          };
+
+          return (
+            <section>
+              <div className="admin-card">
+                <div className="admin-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h3 style={{ margin: 0 }}><i className="bx bx-code-curly" style={{ marginRight: '8px', color: '#7c3aed' }}></i>Tracking &amp; Analytics Code Snippets</h3>
+                    <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#64748b' }}>Inject analytics, pixels and custom scripts into head, body start, or footer — no code editor needed.</p>
+                  </div>
+                </div>
+
+                {/* Quick-Add Presets */}
+                <div style={{ marginBottom: '20px' }}>
+                  <p style={{ fontSize: '12px', fontWeight: 700, color: '#475569', marginBottom: '10px' }}>⚡ Quick Add — Click a platform to insert a pre-filled snippet:</p>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                    {PLATFORM_PRESETS.map(preset => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => addSnippet(preset)}
+                        style={{
+                          display: 'inline-flex', alignItems: 'center', gap: '6px',
+                          padding: '7px 14px', borderRadius: '8px', border: `2px solid ${preset.color}20`,
+                          background: `${preset.color}10`, color: preset.color,
+                          fontSize: '12px', fontWeight: 700, cursor: 'pointer'
+                        }}
+                      >
+                        <i className={`bx ${preset.icon}`} style={{ fontSize: '15px' }}></i>
+                        {preset.label}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addSnippet(null)}
+                      className="add-btn"
+                      style={{ padding: '7px 14px', fontSize: '12px' }}
+                    >
+                      <i className="bx bx-plus" style={{ marginRight: '4px' }}></i> Blank Snippet
+                    </button>
+                  </div>
+                </div>
+
+                {/* Location Legend */}
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                  {Object.entries(LOCATION_LABELS).map(([key, val]) => (
+                    <div key={key} style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '5px 12px', borderRadius: '6px', background: val.bg, border: `1px solid ${val.color}30`, fontSize: '11px', color: val.color, fontWeight: 700 }}>
+                      <code style={{ fontSize: '11px' }}>{val.label}</code> — {val.desc}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Snippet Cards */}
+                {snippets.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '40px 20px', background: '#f8fafc', borderRadius: '12px', border: '2px dashed #e2e8f0' }}>
+                    <i className="bx bx-code-curly" style={{ fontSize: '36px', color: '#cbd5e1', display: 'block', marginBottom: '10px' }}></i>
+                    <p style={{ color: '#94a3b8', fontSize: '13px', margin: 0 }}>No snippets added yet. Use the quick-add buttons above to get started.</p>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {snippets.map((snip) => {
+                      const loc = LOCATION_LABELS[snip.location] || LOCATION_LABELS.head;
+                      const isExpanded = snip.expanded !== false;
+                      return (
+                        <div
+                          key={snip.id}
+                          style={{
+                            border: `2px solid ${snip.enabled ? '#e2e8f0' : '#f1f5f9'}`,
+                            borderRadius: '12px',
+                            background: snip.enabled ? '#ffffff' : '#f8fafc',
+                            overflow: 'hidden',
+                            opacity: snip.enabled ? 1 : 0.65,
+                            transition: 'opacity 0.2s'
+                          }}
+                        >
+                          {/* Card Header */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px', borderBottom: isExpanded ? '1px solid #f1f5f9' : 'none', cursor: 'pointer' }}
+                            onClick={() => updateSnippet(snip.id, 'expanded', !isExpanded)}>
+                            {/* Enable toggle */}
+                            <label className="admin-switch" onClick={e => e.stopPropagation()} style={{ margin: 0, flexShrink: 0 }}>
+                              <input
+                                type="checkbox"
+                                checked={!!snip.enabled}
+                                onChange={e => updateSnippet(snip.id, 'enabled', e.target.checked)}
+                              />
+                              <span className="admin-switch-slider"></span>
+                            </label>
+
+                            {/* Title */}
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {snip.title || 'Untitled Snippet'}
+                              </div>
+                              <div style={{ fontSize: '11px', color: '#64748b', marginTop: '2px' }}>
+                                {snip.enabled ? <span style={{ color: '#16a34a', fontWeight: 600 }}>● Active</span> : <span style={{ color: '#94a3b8', fontWeight: 600 }}>○ Inactive</span>}
+                              </div>
+                            </div>
+
+                            {/* Location badge */}
+                            <span style={{ padding: '3px 10px', borderRadius: '20px', background: loc.bg, color: loc.color, fontSize: '11px', fontWeight: 700, border: `1px solid ${loc.color}30`, whiteSpace: 'nowrap', flexShrink: 0 }}>
+                              <code style={{ fontSize: '10px' }}>{loc.label}</code>
+                            </span>
+
+                            {/* Expand/collapse */}
+                            <i className={`bx bx-chevron-${isExpanded ? 'up' : 'down'}`} style={{ fontSize: '18px', color: '#94a3b8', flexShrink: 0 }}></i>
+
+                            {/* Delete */}
+                            <i className="bx bx-trash" onClick={e => { e.stopPropagation(); removeSnippet(snip.id); }} style={{ fontSize: '18px', color: '#ef4444', cursor: 'pointer', flexShrink: 0 }}></i>
+                          </div>
+
+                          {/* Expanded edit body */}
+                          {isExpanded && (
+                            <div style={{ padding: '16px' }}>
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: '12px', marginBottom: '12px' }}>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label style={{ fontSize: '11px' }}>Snippet Title <span style={{ color: '#ef4444' }}>*</span></label>
+                                  <input
+                                    type="text"
+                                    className="admin-input"
+                                    placeholder="e.g. Google Analytics 4"
+                                    value={snip.title || ''}
+                                    onChange={e => updateSnippet(snip.id, 'title', e.target.value)}
+                                  />
+                                </div>
+                                <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                  <label style={{ fontSize: '11px' }}>Inject Location <span style={{ color: '#ef4444' }}>*</span></label>
+                                  <select
+                                    className="admin-input"
+                                    value={snip.location || 'head'}
+                                    onChange={e => updateSnippet(snip.id, 'location', e.target.value)}
+                                    style={{ background: '#fff' }}
+                                  >
+                                    <option value="head">⟨head⟩ — Page Head</option>
+                                    <option value="body_start">⟨body⟩ start — After body opens</option>
+                                    <option value="body_end">⟨/body⟩ end — Before body closes</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div className="admin-input-group" style={{ marginBottom: 0 }}>
+                                <label style={{ fontSize: '11px' }}>Code / Script <span style={{ color: '#ef4444' }}>*</span></label>
+                                <textarea
+                                  rows="8"
+                                  className="admin-input"
+                                  style={{ fontFamily: '\'Courier New\', Courier, monospace', fontSize: '12px', resize: 'vertical', lineHeight: '1.5', background: '#0f172a', color: '#94a3b8' }}
+                                  placeholder="Paste your tracking code, pixel, or script tag here..."
+                                  value={snip.code || ''}
+                                  onChange={e => updateSnippet(snip.id, 'code', e.target.value)}
+                                />
+                              </div>
+                              <p style={{ margin: '8px 0 0', fontSize: '11px', color: '#94a3b8' }}>
+                                ⚠ Paste the full snippet including <code style={{ background: '#f1f5f9', padding: '1px 4px', borderRadius: '3px' }}>&lt;script&gt;</code> tags. Code is injected via DOM at runtime when the site loads.
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div style={{ marginTop: '16px', padding: '12px 16px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '8px', fontSize: '12px', color: '#92400e' }}>
+                  <strong>💾 Remember to click "Save All Changes"</strong> after adding or editing snippets — changes only take effect on the live site after saving.
+                </div>
+              </div>
+            </section>
+          );
+        })()}
       </main>
     </div>
   );

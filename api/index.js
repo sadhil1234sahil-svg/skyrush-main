@@ -439,7 +439,7 @@ app.delete('/api/admin/users/:username', authenticateToken, async (req, res) => 
 });
 
 // Port listener for local execution only (Vercel bypasses this block)
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`🚀 Skyrush backend server running locally on http://localhost:${PORT}`);
   });
